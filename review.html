@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تحدي المهارات الرقمية: الوسائط المتعددة وسكراتش (الصف الخامس)</title>
+  <!-- تحميل مكتبة Tailwind CSS للتنسيق المتجاوب -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- تحميل خط القاهرة العربي المناسب للواجهة التعليمية -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ضبط الخط الأساسي والاتجاه */
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f8fafc;
+    }
+
+    /* حركات تفاعلية ناعمة */
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes floatSlow {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    .animate-pop {
+      animation: popIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-float {
+      animation: floatSlow 3s ease-in-out infinite;
+    }
+
+    /* شكل لبنة سكراتش المميزة داخل الأسئلة */
+    .scratch-block {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 10px 10px 10px 4px;
+      font-weight: 800;
+      color: #ffffff;
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.16);
+      margin: 0 3px;
+      font-size: 0.92em;
+      line-height: 1.5;
+    }
+
+    .scratch-motion { background-color: #4c97ff; }
+    .scratch-looks { background-color: #9966ff; }
+    .scratch-events { background-color: #ffbf00; color: #1e293b; }
+    .scratch-control { background-color: #ffab19; color: #1e293b; }
+    .scratch-operators { background-color: #59c059; }
+    .scratch-sensing { background-color: #5cb1d6; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-sky-50 to-purple-50 text-slate-800 selection:bg-indigo-600 selection:text-white">
+
+  <!-- الحاوية الرئيسية للتطبيق -->
+  <div id="app" class="max-w-4xl mx-auto px-4 py-6 sm:py-8">
+
+    <!-- الشريط العلوي الثابت للعلامة التعليمية والتحكم بالصوت -->
+    <header class="bg-white/90 backdrop-blur border border-indigo-100 rounded-3xl shadow-sm p-4 sm:px-6 mb-6 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center text-xl sm:text-2xl shadow-md shrink-0">
+          🎬
+        </div>
+        <div>
+          <h1 class="text-base sm:text-xl font-extrabold text-indigo-950 leading-tight">
+            تحدي المهارات الرقمية
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-500 font-semibold">
+            الوسائط المتعددة وسكراتش • الصف الخامس الابتدائي (الفصل الدراسي الأول)
+          </p>
+        </div>
+      </div>
+
+      <!-- زر كتم أو تشغيل المؤثرات الصوتية -->
+      <button
+        id="soundToggleBtn"
+        type="button"
+        aria-label="تبديل المؤثرات الصوتية"
+        class="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-indigo-50 hover:bg-indigo-100 active:scale-95 text-indigo-700 font-bold text-xs sm:text-sm border border-indigo-200 transition cursor-pointer shrink-0"
+      >
+        <span id="soundIcon" class="text-lg">🔊</span>
+        <span id="soundLabel" class="hidden sm:inline">الصوت مفعل</span>
+      </button>
+    </header>
+
+    <!-- 1. شاشة البداية وتسجيل بيانات المتعلم -->
+    <section id="startScreen" class="animate-pop">
+      <div class="bg-white rounded-3xl shadow-xl border border-indigo-100 p-6 sm:p-9">
+        <div class="text-center max-w-2xl mx-auto">
+          <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-100 to-indigo-100 text-4xl sm:text-5xl mb-4 shadow-inner animate-float">
+            🚀
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3">
+            أهلاً بكِ في تحدي الصف الخامس!
+          </h2>
+          <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-7">
+            اختبر معلوماتك في <span class="font-bold text-indigo-600">وحدة الوسائط المتعددة</span> و<span class="font-bold text-purple-600">وحدة البرمجة في سكراتش</span> (كيفية تصميم برنامج، الكائنات في سكراتش، والمعاملات الشرطية). يتم خلط الأسئلة والخيارات عشوائياً في كل محاولة!
+          </p>
+
+          <!-- بطاقات المحاور المغطاة -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-8 text-xs font-bold">
+            <div class="bg-blue-50 text-blue-800 border border-blue-200 rounded-2xl p-2.5">
+              🎙️ الوسائط المتعددة
+            </div>
+            <div class="bg-amber-50 text-amber-800 border border-amber-200 rounded-2xl p-2.5">
+              📝 تصميم برنامج
+            </div>
+            <div class="bg-purple-50 text-purple-800 border border-purple-200 rounded-2xl p-2.5">
+              🐱 الكائنات في سكراتش
+            </div>
+            <div class="bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-2xl p-2.5">
+              ⚖️ المعاملات الشرطية
+            </div>
+          </div>
+        </div>
+
+        <!-- نموذج إدخال اسم الطالب/الطالبة والفصل -->
+        <form id="startForm" class="max-w-lg mx-auto space-y-4">
+          <div>
+            <label for="studentName" class="block text-sm font-extrabold text-slate-700 mb-1.5">
+              الاسم <span class="text-rose-500">*</span>
+            </label>
+            <input
+              id="studentName"
+              type="text"
+              placeholder="اكتب اسمك هنا..."
+              class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none transition text-slate-900 font-semibold text-sm sm:text-base"
+              required
+            />
+          </div>
+
+          <div>
+            <label for="studentClass" class="block text-sm font-extrabold text-slate-700 mb-1.5">
+              الفصل / الشعبة (اختياري)
+            </label>
+            <select
+              id="studentClass"
+              class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none transition text-slate-900 font-semibold text-sm sm:text-base bg-white"
+            >
+              <option value="">-- اختر الفصل --</option>
+              <option value="خامس / أ">خامس / أ</option>
+              <option value="خامس / ب">خامس / ب</option>
+              <option value="خامس / ج">خامس / ج</option>
+              <option value="خامس / د">خامس / د</option>
+            </select>
+          </div>
+
+          <!-- رسالة تنبيه داخلية بدلاً من alert -->
+          <div id="startError" class="hidden bg-rose-50 border border-rose-200 text-rose-700 text-sm font-bold px-4 py-3 rounded-2xl">
+            يرجى إدخال الاسم قبل بدء التحدي.
+          </div>
+
+          <button
+            type="submit"
+            class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 active:scale-[0.99] text-white font-black text-base sm:text-lg shadow-lg shadow-indigo-200 transition cursor-pointer flex items-center justify-center gap-2"
+          >
+            <span>ابدأ التحدي الآن (30 سؤالاً)</span>
+            <span>⚡</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 2. شاشة الأسئلة والتفاعل -->
+    <section id="quizScreen" class="hidden space-y-5 animate-pop">
+      <!-- شريط معلومات المتسابق والتقدم والدرجة -->
+      <div class="bg-white rounded-3xl shadow-md border border-indigo-100 p-4 sm:p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-2 text-xs sm:text-sm font-extrabold text-slate-700">
+            <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full">
+              🎒 <span id="displayStudentName"></span>
+            </span>
+            <span id="displayStudentClass" class="hidden bg-slate-100 text-slate-700 px-3 py-1 rounded-full"></span>
+          </div>
+
+          <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-black">
+            <span id="questionCounter" class="bg-slate-100 text-slate-800 px-3 py-1.5 rounded-xl">
+              السؤال 1 من 30
+            </span>
+            <span class="bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-xl">
+              ⭐ النقاط: <span id="scoreCounter">0</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- شريط التقدم -->
+        <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+          <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full transition-all duration-500" style="width: 3.33%;"></div>
+        </div>
+      </div>
+
+      <!-- بطاقة السؤال الحالية -->
+      <div class="bg-white rounded-3xl shadow-xl border border-indigo-100 p-5 sm:p-8">
+        <!-- وسم الوحدة / المحور -->
+        <div class="flex items-center justify-between gap-2 mb-4">
+          <span id="topicBadge" class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs sm:text-sm font-extrabold bg-purple-100 text-purple-800">
+            محور السؤال
+          </span>
+          <span class="text-xs font-bold text-slate-400">درجة واحدة</span>
+        </div>
+
+        <!-- نص السؤال -->
+        <h3 id="questionText" class="text-lg sm:text-2xl font-extrabold text-slate-900 leading-relaxed mb-6"></h3>
+
+        <!-- خيارات الإجابة (يتم توليدها وخلطها عشوائياً) -->
+        <div id="optionsContainer" class="grid grid-cols-1 gap-3 sm:gap-3.5"></div>
+
+        <!-- صندوق التغذية الراجعة الفورية -->
+        <div id="feedbackBox" class="hidden mt-6 p-4 sm:p-5 rounded-2xl border-2 animate-pop">
+          <div class="flex items-start gap-3">
+            <span id="feedbackIcon" class="text-2xl leading-none mt-0.5">✅</span>
+            <div class="flex-1">
+              <p id="feedbackTitle" class="font-black text-base sm:text-lg mb-1"></p>
+              <p id="feedbackExplanation" class="text-xs sm:text-sm font-semibold leading-relaxed"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- زر الانتقال للسؤال التالي أو إنهاء الاختبار -->
+        <div class="mt-7 flex justify-end">
+          <button
+            id="nextBtn"
+            type="button"
+            disabled
+            class="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-black text-sm sm:text-base shadow-md transition cursor-pointer flex items-center justify-center gap-2"
+          >
+            <span id="nextBtnText">السؤال التالي</span>
+            <span>⬅️</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. شاشة النتيجة النهائية وملخص الإجابات -->
+    <section id="resultScreen" class="hidden space-y-6 animate-pop">
+      <div class="bg-white rounded-3xl shadow-xl border border-indigo-100 p-6 sm:p-9 text-center">
+        <div id="resultEmoji" class="text-6xl mb-3 animate-float">🏅</div>
+        <div class="inline-block bg-indigo-50 text-indigo-700 border border-indigo-200 px-4 py-1 rounded-full text-xs sm:text-sm font-extrabold mb-3">
+          ملخص نتيجة التحدي
+        </div>
+        <h2 id="resultHeading" class="text-2xl sm:text-3xl font-black text-slate-900 mb-2">
+          أحسنت!
+        </h2>
+        <p id="resultStudentMeta" class="text-sm sm:text-base font-bold text-slate-500 mb-6"></p>
+
+        <!-- بطاقة الدرجة والتقدير -->
+        <div class="max-w-md mx-auto bg-gradient-to-br from-indigo-600 to-purple-700 text-white rounded-3xl p-6 shadow-lg mb-7">
+          <p class="text-xs sm:text-sm font-bold text-indigo-100 mb-1">النتيجة النهائية</p>
+          <p id="finalScoreDisplay" class="text-4xl sm:text-5xl font-black mb-2">0 / 30</p>
+          <p id="finalPercentageDisplay" class="text-sm font-extrabold bg-white/15 inline-block px-3.5 py-1 rounded-full mb-3">
+            النسبة: 0%
+          </p>
+          <div>
+            <span id="gradeBadge" class="inline-block bg-amber-300 text-slate-900 font-black text-sm sm:text-base px-4 py-1.5 rounded-2xl shadow">
+              التقدير
+            </span>
+          </div>
+        </div>
+
+        <!-- أزرار إعادة المحاولة -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button
+            id="retrySameStudentBtn"
+            type="button"
+            class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm sm:text-base shadow-md transition cursor-pointer"
+          >
+            🔄 إعادة الاختبار بترتيب جديد
+          </button>
+          <button
+            id="changeStudentBtn"
+            type="button"
+            class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-sm sm:text-base transition cursor-pointer"
+          >
+            🎒 تغيير الاسم
+          </button>
+        </div>
+      </div>
+
+      <!-- مراجعة تفصيلية لجميع الأسئلة -->
+      <div class="bg-white rounded-3xl shadow-lg border border-indigo-100 p-5 sm:p-8">
+        <h3 class="text-lg sm:text-xl font-black text-slate-900 mb-4 flex items-center gap-2">
+          <span>📋</span>
+          <span>مراجعة الإجابات والحلول</span>
+        </h3>
+        <div id="reviewList" class="space-y-3.5"></div>
+      </div>
+    </section>
+
+    <!-- تذييل بسيط -->
+    <footer class="mt-8 text-center text-xs sm:text-sm text-slate-500 font-semibold">
+      منهج المهارات الرقمية • الصف الخامس الابتدائي (الفصل الدراسي الأول)
+    </footer>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. بنك الأسئلة (30 سؤالاً من الوحدة 3 كاملة والوحدة 4: تصميم برنامج، الكائنات، والمعاملات الشرطية)
+    // =========================================================================
+    const QUESTIONS_BANK = [
+      // --- الوحدة الثالثة كاملة: الوسائط المتعددة (12 سؤالاً) ---
+      {
+        id: 1,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "ما المقصود بـ (أجهزة الالتقاط) في درس استخدام أجهزة الالتقاط وتحرير مقاطع الصوت؟",
+        options: [
+          "أجهزة تُستخدم لالتقاط الأصوات والصور ومقاطع الفيديو ويمكن توصيلها بالحاسب لحفظ ما تلتقطه كملفات وسائط متعددة",
+          "أجهزة تُستخدم فقط لطباعة النصوص على الورق",
+          "برامج مخصصة لكتابة المقاطع البرمجية في سكراتش",
+          "لوحات مفاتيح لإدخال الحروف والأرقام فقط"
+        ],
+        answerIndex: 0,
+        explanation: "أجهزة الالتقاط هي أجهزة تُستخدم لالتقاط الأصوات والصور ومقاطع الفيديو، ويمكن توصيلها بجهاز الحاسب لحفظ ما تلتقطه كملفات وسائط متعددة."
+      },
+      {
+        id: 2,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "أي من الأجهزة التالية يُعد من أجهزة الالتقاط المذكورة في الوحدة الثالثة؟",
+        options: [
+          "الهاتف المحمول (Mobile) والكاميرا الرقمية (Digital Camera)",
+          "الشاشة المسطحة والطابعة الورقية فقط",
+          "لوحة المفاتيح والفأرة فقط",
+          "مكبر الصوت الخارجي فقط"
+        ],
+        answerIndex: 0,
+        explanation: "من أجهزة الالتقاط المذكورة في الدرس: الهاتف المحمول والكاميرا الرقمية والماسح الضوئي."
+      },
+      {
+        id: 3,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "ما فائدة نقل الصور ومقاطع الفيديو من الكاميرا الرقمية أو جهاز الالتقاط إلى جهاز الحاسب؟",
+        options: [
+          "تخزين عدد كبير من الملفات بشكل منظم وآمن والاحتفاظ بنسخة منها على الحاسب",
+          "حذف الملفات نهائياً من ذاكرة الكاميرا دون إمكانية رؤيتها",
+          "تحويل الصور إلى مقاطع برمجية في سكراتش",
+          "تعطيل منفذ USB في الحاسب"
+        ],
+        answerIndex: 0,
+        explanation: "يساعد نقل البيانات إلى جهاز الحاسب على تخزين الملفات بشكل منظم وآمن والاحتفاظ بنسخة منها."
+      },
+      {
+        id: 4,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "ما هو برنامج (أوداسيتي - Audacity) كما ورد في درس تحرير مقاطع الصوت؟",
+        options: [
+          "برنامج تسجيل ومحرِّر مقاطع صوتية رقمي مجاني مفتوح المصدر",
+          "برنامج مخصص لتحرير الصور ثلاثية الأبعاد فقط",
+          "متصفح للبحث عن مقاطع الفيديو عبر الإنترنت",
+          "جهاز لالتقاط الصور الفوتوغرافية"
+        ],
+        answerIndex: 0,
+        explanation: "أوداسيتي (Audacity) هو برنامج تسجيل ومحرِّر مقاطع صوتية رقمي مجاني مفتوح المصدر."
+      },
+      {
+        id: 5,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "أي مفتاح في لوحة المفاتيح يُستخدم لتشغيل وإيقاف المقطع الصوتي في برنامج أوداسيتي (Audacity)؟",
+        options: [
+          "مفتاح المسافة (Space bar)",
+          "مفتاح الحذف (Delete)",
+          "مفتاح الإدخال (Enter)",
+          "مفتاح الهروب (Esc)"
+        ],
+        answerIndex: 0,
+        explanation: "يمكن تشغيل وإيقاف المقطع الصوتي في برنامج أوداسيتي بالضغط على مفتاح المسافة (Space bar) أو من شريط التحكم."
+      },
+      {
+        id: 6,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "ماذا يحدث عند حفظ مشروع العمل في برنامج أوداسيتي (Save Project)؟",
+        options: [
+          "يُحفظ كمشروع صوتي في البرنامج، بينما يُستخدم التصدير لحفظه بصيغ صوتية شائعة مثل MP3 لتشغيله في المشغلات المعتادة",
+          "يُحذف المقطع الصوتي تلقائياً بعد الحفظ",
+          "يتحول مباشرة إلى ملف فيديو دون تصدير",
+          "لا يمكن فتحه مرة أخرى في أوداسيتي"
+        ],
+        answerIndex: 0,
+        explanation: "يُحفظ ملف العمل في أوداسيتي كمشروع صوتي، وعند الرغبة في حفظه بصيغة صوتية شائعة مثل MP3 يتم تصديره."
+      },
+      {
+        id: 7,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "من قائمة (File) في برنامج أوداسيتي، أي أمر يُستخدم لإضافة مقطع صوتي آخر إلى المقطع الموجود؟",
+        options: [
+          "استيراد (Import) ثم الصوت (Audio)",
+          "إغلاق النافذة (Close)",
+          "طباعة الصفحة (Print)",
+          "تكبير الخط (Zoom)"
+        ],
+        answerIndex: 0,
+        explanation: "لإضافة أصوات أخرى في الملف الصوتي داخل أوداسيتي نختار من قائمة File الأمر Import ثم Audio."
+      },
+      {
+        id: 8,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "ما العلاقة بين حجم الصورة ووضوحها كما ورد في درس البحث عن الوسائط المتعددة؟",
+        options: [
+          "يزداد وضوح الصورة كلما كان حجمها أكبر",
+          "يقل وضوح الصورة كلما زاد حجمها",
+          "لا يوجد أي علاقة بين حجم الصورة ووضوحها",
+          "الصور الصغيرة دائماً أكثر وضوحاً من الصور الكبيرة"
+        ],
+        answerIndex: 0,
+        explanation: "يزداد وضوح الصورة كلما كان حجمها أكبر، ويختلف حجم الصور المستخدمة على المواقع الإلكترونية."
+      },
+      {
+        id: 9,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "عند البحث عن مقاطع فيديو باستخدام محرك بحث جوجل (Google)، ماذا يتيح لك اختيار (الأدوات - Tools)؟",
+        options: [
+          "تحديد مدة مقطع الفيديو الذي تود البحث عنه",
+          "تغيير لون خلفية المنصة في سكراتش",
+          "تسجيل صوتك عبر الميكروفون",
+          "إنشاء متغير جديد في ذاكرة الحاسب"
+        ],
+        answerIndex: 0,
+        explanation: "عند البحث عن مقاطع الفيديو في محرك بحث جوجل، يمكنك اختيار الأدوات (Tools) لتحديد مدة مقطع الفيديو المطلوب."
+      },
+      {
+        id: 10,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "لإنشاء مقطع فيديو في نافذة الصور (Photos)، أي خيار نضغط عليه للبدء؟",
+        options: [
+          "محرر مقاطع الفيديو (Video Editor)",
+          "تصفية البيانات (Filter)",
+          "الفرز الأبجدي (Sort)",
+          "مكتبة الكائنات (Sprite Library)"
+        ],
+        answerIndex: 0,
+        explanation: "في نافذة الصور (Photos) نضغط على محرر مقاطع الفيديو (Video Editor) لإنشاء مقطع فيديو جديد."
+      },
+      {
+        id: 11,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "في محرر مقاطع الفيديو (Video Editor)، أين توضع الصور المضافة لترتيبها في مقطع الفيديو؟",
+        options: [
+          "في لوحة العمل (Storyboard)",
+          "في منطقة اللبنات البرمجية",
+          "في شريط العنوان فقط",
+          "في سلة المحذوفات"
+        ],
+        answerIndex: 0,
+        explanation: "تُضاف الصور إلى لوحة العمل (Storyboard) في محرر مقاطع الفيديو لترتيبها وتحريرها."
+      },
+      {
+        id: 12,
+        topic: "الوحدة 3: الوسائط المتعددة",
+        question: "أي عبارة صحيحة فيما يتعلق بالصور الموجودة على الإنترنت بحسب درس البحث عن الوسائط المتعددة؟",
+        options: [
+          "ليست جميع الصور الموجودة على الإنترنت متاحة للاستخدام مجاناً أو دون قيود",
+          "جميع الصور الموجودة على الإنترنت متاحة للاستخدام مجاناً دائماً",
+          "لا يمكن حفظ أي صورة من الإنترنت على جهاز الحاسب",
+          "جميع الصور على الإنترنت هي مقاطع صوتية فقط"
+        ],
+        answerIndex: 0,
+        explanation: "ليست جميع الصور الموجودة على الإنترنت متاحة للاستخدام مجاناً، ويجب مراعاة حقوق الاستخدام عند البحث عن الوسائط."
+      },
+
+      // --- الوحدة الرابعة - الدرس 1: كيفية تصميم برنامج (6 أسئلة) ---
+      {
+        id: 13,
+        topic: "الوحدة 4: كيفية تصميم برنامج",
+        question: "ما الترتيب الصحيح لخطوات إنشاء برنامج كما ورد في درس كيفية تصميم برنامج؟",
+        options: [
+          "تحليل المشكلة، ثم إنشاء الخوارزمية، ثم رسم المخطط الانسيابي، ثم كتابة المقطع البرمجي",
+          "كتابة المقطع البرمجي أولاً، ثم تحليل المشكلة أخيراً",
+          "رسم المخطط الانسيابي، ثم حذف الخوارزمية، ثم إغلاق البرنامج",
+          "تحليل المشكلة فقط دون خوارزمية أو مخطط انسيابي أو مقطع برمجي"
+        ],
+        answerIndex: 0,
+        explanation: "خطوات إنشاء برنامج بالترتيب: 1) تحليل المشكلة، 2) إنشاء الخوارزمية، 3) رسم المخطط الانسيابي، 4) كتابة المقطع البرمجي."
+      },
+      {
+        id: 14,
+        topic: "الوحدة 4: كيفية تصميم برنامج",
+        question: "ما المقصود بـ (تحليل المشكلة) في خطوات إنشاء برنامج؟",
+        options: [
+          "فهم المشكلة التي تريد حلها وتحديد الخطوات اللازمة لحلها",
+          "تلوين الكائنات داخل مكتبة سكراتش",
+          "تصدير ملف صوتي بصيغة MP3",
+          "إضافة مؤثرات ثلاثية الأبعاد إلى الفيديو"
+        ],
+        answerIndex: 0,
+        explanation: "تحليل المشكلة يعني فهم المشكلة المطلوب حلها وتحديد الخطوات اللازمة قبل البدء بكتابة المقطع البرمجي."
+      },
+      {
+        id: 15,
+        topic: "الوحدة 4: كيفية تصميم برنامج",
+        question: "ما تعريف (الخوارزمية) في الوحدة الرابعة؟",
+        options: [
+          "مجموعة التعليمات المتسلسلة خطوة بخطوة لحل مشكلة أو إكمال مهمة معينة مكتوبة بكلمات بسيطة",
+          "صورة فوتوغرافية تُلتقط بالكاميرا الرقمية",
+          "أداة لقياس حجم الملفات على الحاسب",
+          "مفتاح المسافة في لوحة المفاتيح"
+        ],
+        answerIndex: 0,
+        explanation: "الخوارزمية هي مجموعة التعليمات المتسلسلة خطوة بخطوة والخاصة بحل مشكلة أو إكمال مهمة معينة."
+      },
+      {
+        id: 16,
+        topic: "الوحدة 4: كيفية تصميم برنامج",
+        question: "ما هو (المخطط الانسيابي - Flowchart)؟",
+        options: [
+          "تمثيل خطوات الخوارزمية باستخدام أشكال قياسية مرتبطة بأسهم توضح ترتيب واتجاه سير الخطوات",
+          "قائمة الألوان في برنامج أوداسيتي",
+          "مجلد لحفظ الصور على سطح المكتب",
+          "أداة لقص المقاطع الصوتية فقط"
+        ],
+        answerIndex: 0,
+        explanation: "يُمثّل المخطط الانسيابي خطوات الخوارزمية بأشكال توضيحية تربطها الأسهم لإظهار الترتيب والاتجاه."
+      },
+      {
+        id: 17,
+        topic: "الوحدة 4: كيفية تصميم برنامج",
+        question: "ما وظيفة (الأسهم) في المخطط الانسيابي؟",
+        options: [
+          "ربط الأشكال وإظهار الاتجاهات واتباع ترتيب الخطوات",
+          "حذف الخطوات غير المهمة من البرنامج",
+          "تشغيل مقطع الفيديو في نافذة الصور",
+          "تغيير حجم الخط في المستند"
+        ],
+        answerIndex: 0,
+        explanation: "تُستخدم الأسهم في المخطط الانسيابي لربط الأشكال وإظهار الاتجاه الذي يجب أن تتبعه الخطوات."
+      },
+      {
+        id: 18,
+        topic: "الوحدة 4: كيفية تصميم برنامج",
+        question: "ماذا نقصد بـ (كتابة المقطع البرمجي) في خطوات إنشاء برنامج؟",
+        options: [
+          "تحويل خطوات الحل والمخطط الانسيابي إلى أوامر برمجية بدمج وتركيب اللبنات في سكراتش",
+          "التقاط صورة بالكاميرا الرقمية",
+          "تحديد مدة الفيديو في محرك البحث",
+          "تثبيت برنامج أوداسيتي على الحاسب"
+        ],
+        answerIndex: 0,
+        explanation: "كتابة المقطع البرمجي هي تحويل الحل إلى أوامر برمجية عبر تركيب اللبنات البرمجية في سكراتش."
+      },
+
+      // --- الوحدة الرابعة - الدرس 2: الكائنات في سكراتش (6 أسئلة) ---
+      {
+        id: 19,
+        topic: "الوحدة 4: الكائنات في سكراتش",
+        question: "ما هو (الكائن - Sprite) في برنامج سكراتش بحسب تدريبات الدرس الثاني؟",
+        options: [
+          "عنصر أو شخصية أو نص أو صورة أو رسمة في برنامج سكراتش يمكن برمجتها على المنصة",
+          "سلك توصيل الكاميرا بمنفذ USB",
+          "أداة لتسجيل الصوت في برنامج أوداسيتي",
+          "مجلد الصور في جهاز الحاسب"
+        ],
+        answerIndex: 0,
+        explanation: "الكائن في برنامج سكراتش هو عنصر أو شخصية أو نص أو صورة أو رسمة يمكن برمجتها وتتحرك أو تتفاعل على المنصة."
+      },
+      {
+        id: 20,
+        topic: "الوحدة 4: الكائنات في سكراتش",
+        question: "من أين يمكن إضافة كائن جديد إلى المنصة في سكراتش؟",
+        options: [
+          "من خلال زر اختيار كائن (Choose a Sprite) وفتح مكتبة الكائنات (Sprite Library)",
+          "من خلال قائمة ملف في برنامج أوداسيتي",
+          "من خلال أداة محرر الفيديو في نافذة الصور",
+          "لا يمكن إضافة كائنات جديدة في سكراتش"
+        ],
+        answerIndex: 0,
+        explanation: "يمكن إضافة كائن إلى المنصة بالضغط على زر اختيار كائن (Choose a Sprite) واختيار كائن من مكتبة الكائنات (Sprite Library)."
+      },
+      {
+        id: 21,
+        topic: "الوحدة 4: الكائنات في سكراتش",
+        question: "كيف يمكن إيحاء أن الكائن يتحرك في برنامج سكراتش؟",
+        options: [
+          "بتغيير مظهر الكائن (Costume)",
+          "بإغلاق نافذة سكراتش",
+          "بحذف جميع اللبنات من منطقة البرمجة",
+          "بتغيير اسم ملف الصوت"
+        ],
+        answerIndex: 0,
+        explanation: "للإيحاء بأن الكائن يتحرك في سكراتش يمكن تبديل أو تغيير مظهره."
+      },
+      {
+        id: 22,
+        topic: "الوحدة 4: الكائنات في سكراتش",
+        question: "أي عبارة صحيحة حول الكائنات في سكراتش بحسب تدريبات الكتاب؟",
+        options: [
+          "يمكن إضافة كائن من مكتبة الكائنات وتغيير مظهره وبرمجته باستخدام اللبنات",
+          "لا يمكن إضافة كائن إلى سكراتش بأي شكل من الأشكال",
+          "الكائن المكرر لا يمكن برمجته أبداً",
+          "توجد فئة واحدة فقط من اللبنات في سكراتش"
+        ],
+        answerIndex: 0,
+        explanation: "يتيح برنامج سكراتش اختيار الكائنات من مكتبة الكائنات وتغيير مظاهرها وبرمجتها باستخدام اللبنات."
+      },
+      {
+        id: 23,
+        topic: "الوحدة 4: الكائنات في سكراتش",
+        question: "أين توجد الأوامر البرمجية في سكراتش التي نركبها لبرمجة الكائن؟",
+        options: [
+          "في اللبنات البرمجية ضمن علامة التبويب المقاطع البرمجية (Code)",
+          "في لوحة العمل (Storyboard) بمحرر الفيديو",
+          "في شريط المعاينة بالماسح الضوئي",
+          "في مجلد الموسيقى فقط"
+        ],
+        answerIndex: 0,
+        explanation: "تُسمى الأوامر في سكراتش (اللبنات) وتوجد ضمن علامة التبويب المقاطع البرمجية (Code)."
+      },
+      {
+        id: 24,
+        topic: "الوحدة 4: الكائنات في سكراتش",
+        question: "ما الذي يميز فئات اللبنات البرمجية في سكراتش؟",
+        options: [
+          "لكل فئة لون محدد وتُستخدم لأداء مهام معينة في المقطع البرمجي",
+          "جميع اللبنات لها اللون نفسه وتؤدي الوظيفة نفسها",
+          "تُستخدم فقط لتشغيل ملفات الفيديو",
+          "لا يمكن دمجها مع بعضها البعض"
+        ],
+        answerIndex: 0,
+        explanation: "تتميز فئات اللبنات البرمجية في سكراتش بأن لكل فئة لوناً معيناً وتؤدي مهام محددة."
+      },
+
+      // --- الوحدة الرابعة - الدرس 3: المعاملات الشرطية (6 أسئلة) ---
+      {
+        id: 25,
+        topic: "الوحدة 4: المعاملات الشرطية",
+        question: "ما وظيفة (المعاملات الشرطية) في سكراتش كما ورد في درس المعاملات الشرطية؟",
+        options: [
+          "مقارنة القيم أثناء كتابة الجمل الشرطية للتحقق من القيم ثم اتخاذ القرار بناءً على تحقق الشرط",
+          "تسجيل الصوت من الميكروفون مباشرة",
+          "نقل الصور من الكاميرا عبر منفذ USB",
+          "حذف المخطط الانسيابي"
+        ],
+        answerIndex: 0,
+        explanation: "تُستخدم المعاملات الشرطية لمقارنة القيم في الجمل الشرطية للتحقق منها واتخاذ القرار بناءً على تحقق الشرط."
+      },
+      {
+        id: 26,
+        topic: "الوحدة 4: المعاملات الشرطية",
+        question: 'أي من اللبنات التالية يُعد من لبنات المعاملات الشرطية الشائعة في سكراتش؟',
+        options: [
+          '<span class="scratch-block scratch-operators">( ) أكبر من ( )</span> و<span class="scratch-block scratch-operators">( ) أصغر من ( )</span> و<span class="scratch-block scratch-operators">( ) يساوي ( )</span>',
+          '<span class="scratch-block scratch-motion">تحرك 10 خطوة</span>',
+          '<span class="scratch-block scratch-events">عند نقر العلم الأخضر</span>',
+          'أمر استيراد ملف صوتي في أوداسيتي'
+        ],
+        answerIndex: 0,
+        explanation: "لبنات المعاملات الشرطية الشائعة في سكراتش هي: أكبر من (>)، أصغر من (<)، ويساوي (=)."
+      },
+      {
+        id: 27,
+        topic: "الوحدة 4: المعاملات الشرطية",
+        question: 'كيف تفحص لبنة <span class="scratch-block scratch-operators">( ) أكبر من ( )</span> القيمتين؟',
+        options: [
+          "إذا كانت القيمة الأولى أكبر من القيمة الثانية تكون النتيجة صحيحة، وفيما عدا ذلك تكون خطأ",
+          "إذا كانت القيمتان متساويتين فقط تكون النتيجة صحيحة دائماً",
+          "تحذف القيمة الأولى وتبقي الثانية",
+          "تشغل مقطع فيديو تلقائياً"
+        ],
+        answerIndex: 0,
+        explanation: "تفحص لبنة أكبر من ما إذا كانت القيمة الأولى أكبر من القيمة الثانية، فتكون النتيجة صحيحة إذا تحقق ذلك وإلا فهي خطأ."
+      },
+      {
+        id: 28,
+        topic: "الوحدة 4: المعاملات الشرطية",
+        question: 'متى تعطي لبنة <span class="scratch-block scratch-operators">( ) يساوي ( )</span> نتيجة صحيحة؟',
+        options: [
+          "عندما تكون القيمة الأولى مساوية للقيمة الثانية",
+          "عندما تكون القيمة الأولى أكبر من الثانية دائماً",
+          "عندما تكون القيمة الأولى أصغر من الثانية دائماً",
+          "عندما يكون المربعان فارغين تماماً"
+        ],
+        answerIndex: 0,
+        explanation: "تعطي لبنة يساوي نتيجة صحيحة عندما تكون القيمة الأولى مساوية للقيمة الثانية، وفيما عدا ذلك تكون النتيجة خطأ."
+      },
+      {
+        id: 29,
+        topic: "الوحدة 4: المعاملات الشرطية",
+        question: 'ماذا تفحص لبنة <span class="scratch-block scratch-operators">( ) أصغر من ( )</span>؟',
+        options: [
+          "ما إذا كانت القيمة الأولى أصغر من القيمة الثانية",
+          "ما إذا كانت الصورة عالية الوضوح",
+          "ما إذا كان سلك الكاميرا متصلاً",
+          "عدد الصفحات في المستند"
+        ],
+        answerIndex: 0,
+        explanation: "تفحص لبنة أصغر من إذا كانت القيمة الأولى أصغر من القيمة الثانية، فتكون النتيجة صحيحة إذا تحققت وإلا خطأ."
+      },
+      {
+        id: 30,
+        topic: "الوحدة 4: المعاملات الشرطية",
+        question: "ماذا يُسمى تنفيذ أوامر معينة فقط عند تحقق الشرط ومقارنة البيانات بالشرط في سكراتش؟",
+        options: [
+          "التنفيذ المشروط",
+          "التصدير الصوتي",
+          "المسح الضوئي",
+          "المعاينة المسبقة للطباعة"
+        ],
+        answerIndex: 0,
+        explanation: "مقارنة القيم بالشرط وتنفيذ الأوامر عند تحققه يُسمى التنفيذ المشروط."
+      }
+    ];
+
+    // =========================================================================
+    // 2. نظام المؤثرات الصوتية التفاعلية عبر Web Audio API
+    // =========================================================================
+    class SoundEffects {
+      constructor() {
+        this.enabled = true;
+        this.ctx = null;
+      }
+
+      ensureContext() {
+        if (!this.ctx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) {
+            this.ctx = new AudioContextClass();
+          }
+        }
+        if (this.ctx && this.ctx.state === "suspended") {
+          this.ctx.resume().catch(() => {});
+        }
+      }
+
+      playTone(freq, duration, type = "sine", delay = 0, gainValue = 0.14) {
+        if (!this.enabled) return;
+        this.ensureContext();
+        if (!this.ctx) return;
+
+        try {
+          const now = this.ctx.currentTime + delay;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, now);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.exponentialRampToValueAtTime(gainValue, now + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(now);
+          osc.stop(now + duration + 0.02);
+        } catch (err) {
+          // تجاهل أخطاء الصوت في المتصفحات المقيدة
+        }
+      }
+
+      click() {
+        this.playTone(520, 0.08, "triangle", 0, 0.09);
+      }
+
+      correct() {
+        this.playTone(523.25, 0.12, "triangle", 0, 0.14);
+        this.playTone(659.25, 0.12, "triangle", 0.1, 0.14);
+        this.playTone(783.99, 0.22, "triangle", 0.2, 0.16);
+      }
+
+      wrong() {
+        this.playTone(311.13, 0.16, "sawtooth", 0, 0.09);
+        this.playTone(233.08, 0.24, "sawtooth", 0.14, 0.09);
+      }
+
+      finish() {
+        this.playTone(523.25, 0.13, "triangle", 0, 0.14);
+        this.playTone(659.25, 0.13, "triangle", 0.12, 0.14);
+        this.playTone(783.99, 0.13, "triangle", 0.24, 0.14);
+        this.playTone(1046.5, 0.32, "triangle", 0.36, 0.16);
+      }
+    }
+
+    const soundFX = new SoundEffects();
+
+    // =========================================================================
+    // 3. حالة اللعبة وإدارة الشاشات
+    // =========================================================================
+    const state = {
+      studentName: "",
+      studentClass: "",
+      questions: [],
+      currentIndex: 0,
+      score: 0,
+      answered: false,
+      history: []
+    };
+
+    function shuffleArray(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function prepareShuffledQuestions() {
+      return shuffleArray(QUESTIONS_BANK).map((q) => {
+        const indexedOptions = q.options.map((text, idx) => ({
+          text,
+          isCorrect: idx === q.answerIndex
+        }));
+        const shuffledOptions = shuffleArray(indexedOptions);
+        const correctText = q.options[q.answerIndex];
+
+        return {
+          id: q.id,
+          topic: q.topic,
+          question: q.question,
+          options: shuffledOptions,
+          correctText
+        };
+      });
+    }
+
+    // عناصر الواجهة
+    const startScreen = document.getElementById("startScreen");
+    const quizScreen = document.getElementById("quizScreen");
+    const resultScreen = document.getElementById("resultScreen");
+
+    const startForm = document.getElementById("startForm");
+    const studentNameInput = document.getElementById("studentName");
+    const studentClassInput = document.getElementById("studentClass");
+    const startError = document.getElementById("startError");
+
+    const soundToggleBtn = document.getElementById("soundToggleBtn");
+    const soundIcon = document.getElementById("soundIcon");
+    const soundLabel = document.getElementById("soundLabel");
+
+    const displayStudentName = document.getElementById("displayStudentName");
+    const displayStudentClass = document.getElementById("displayStudentClass");
+    const questionCounter = document.getElementById("questionCounter");
+    const scoreCounter = document.getElementById("scoreCounter");
+    const progressBar = document.getElementById("progressBar");
+    const topicBadge = document.getElementById("topicBadge");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+
+    const feedbackBox = document.getElementById("feedbackBox");
+    const feedbackIcon = document.getElementById("feedbackIcon");
+    const feedbackTitle = document.getElementById("feedbackTitle");
+    const feedbackExplanation = document.getElementById("feedbackExplanation");
+
+    const nextBtn = document.getElementById("nextBtn");
+    const nextBtnText = document.getElementById("nextBtnText");
+
+    const retrySameStudentBtn = document.getElementById("retrySameStudentBtn");
+    const changeStudentBtn = document.getElementById("changeStudentBtn");
+    const reviewList = document.getElementById("reviewList");
+
+    soundToggleBtn.addEventListener("click", () => {
+      soundFX.enabled = !soundFX.enabled;
+      if (soundFX.enabled) {
+        soundIcon.textContent = "🔊";
+        soundLabel.textContent = "الصوت مفعل";
+        soundFX.click();
+      } else {
+        soundIcon.textContent = "🔇";
+        soundLabel.textContent = "الصوت مكتوم";
+      }
+    });
+
+    startForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nameVal = studentNameInput.value.trim();
+      if (!nameVal) {
+        startError.classList.remove("hidden");
+        studentNameInput.focus();
+        return;
+      }
+
+      startError.classList.add("hidden");
+      state.studentName = nameVal;
+      state.studentClass = studentClassInput.value.trim();
+      soundFX.click();
+      startQuiz();
+    });
+
+    function startQuiz() {
+      state.questions = prepareShuffledQuestions();
+      state.currentIndex = 0;
+      state.score = 0;
+      state.answered = false;
+      state.history = [];
+
+      displayStudentName.textContent = state.studentName;
+      if (state.studentClass) {
+        displayStudentClass.textContent = `الفصل: ${state.studentClass}`;
+        displayStudentClass.classList.remove("hidden");
+      } else {
+        displayStudentClass.classList.add("hidden");
+      }
+
+      scoreCounter.textContent = "0";
+      startScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      quizScreen.classList.remove("hidden");
+
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const total = state.questions.length;
+      const currentQ = state.questions[state.currentIndex];
+      state.answered = false;
+
+      questionCounter.textContent = `السؤال ${state.currentIndex + 1} من ${total}`;
+      const progressPercent = ((state.currentIndex + 1) / total) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      topicBadge.textContent = currentQ.topic;
+      questionText.innerHTML = currentQ.question;
+
+      feedbackBox.classList.add("hidden");
+      nextBtn.disabled = true;
+      nextBtnText.textContent = state.currentIndex === total - 1 ? "عرض النتيجة النهائية" : "السؤال التالي";
+
+      optionsContainer.innerHTML = "";
+      const letters = ["أ", "ب", "ج", "د"];
+
+      currentQ.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className =
+          "option-btn w-full text-right p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/70 hover:bg-indigo-50/70 hover:border-indigo-300 active:scale-[0.99] transition flex items-center gap-3.5 cursor-pointer";
+        btn.innerHTML = `
+          <span class="w-9 h-9 rounded-xl bg-white border border-slate-200 text-indigo-700 font-black flex items-center justify-center shrink-0 shadow-xs">
+            ${letters[idx] || idx + 1}
+          </span>
+          <span class="font-bold text-slate-800 text-sm sm:text-base leading-relaxed flex-1">${opt.text}</span>
+        `;
+
+        btn.addEventListener("click", () => handleAnswerSelection(btn, opt, currentQ));
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function handleAnswerSelection(selectedBtn, selectedOpt, currentQ) {
+      if (state.answered) return;
+      state.answered = true;
+
+      const allOptionBtns = optionsContainer.querySelectorAll(".option-btn");
+      allOptionBtns.forEach((btn) => {
+        btn.disabled = true;
+        btn.classList.remove("hover:bg-indigo-50/70", "hover:border-indigo-300", "cursor-pointer");
+        btn.classList.add("cursor-default");
+      });
+
+      const isCorrect = selectedOpt.isCorrect;
+
+      allOptionBtns.forEach((btn, idx) => {
+        const optData = currentQ.options[idx];
+        if (optData.isCorrect) {
+          btn.classList.remove("border-slate-200", "bg-slate-50/70");
+          btn.classList.add("border-emerald-500", "bg-emerald-50");
+          const badge = btn.querySelector("span:first-child");
+          if (badge) {
+            badge.className = "w-9 h-9 rounded-xl bg-emerald-600 text-white font-black flex items-center justify-center shrink-0";
+          }
+        }
+      });
+
+      if (isCorrect) {
+        state.score += 1;
+        scoreCounter.textContent = String(state.score);
+        soundFX.correct();
+      } else {
+        selectedBtn.classList.remove("border-slate-200", "bg-slate-50/70");
+        selectedBtn.classList.add("border-rose-500", "bg-rose-50");
+        const badge = selectedBtn.querySelector("span:first-child");
+        if (badge) {
+          badge.className = "w-9 h-9 rounded-xl bg-rose-600 text-white font-black flex items-center justify-center shrink-0";
+        }
+        soundFX.wrong();
+      }
+
+      const originalQ = QUESTIONS_BANK.find((item) => item.id === currentQ.id);
+      const explanationText = originalQ ? originalQ.explanation : "";
+
+      feedbackBox.classList.remove("hidden");
+      if (isCorrect) {
+        feedbackBox.className = "mt-6 p-4 sm:p-5 rounded-2xl border-2 border-emerald-300 bg-emerald-50/90 text-emerald-950 animate-pop";
+        feedbackIcon.textContent = "🎉";
+        feedbackTitle.textContent = "إجابة صحيحة! أحسنت (+1 نقطة)";
+        feedbackExplanation.textContent = explanationText;
+      } else {
+        feedbackBox.className = "mt-6 p-4 sm:p-5 rounded-2xl border-2 border-rose-300 bg-rose-50/90 text-rose-950 animate-pop";
+        feedbackIcon.textContent = "💡";
+        feedbackTitle.textContent = "إجابة غير صحيحة — تعرّف على السبب:";
+        feedbackExplanation.innerHTML = `${explanationText} (الإجابة الصحيحة: ${currentQ.correctText})`;
+      }
+
+      state.history.push({
+        number: state.currentIndex + 1,
+        topic: currentQ.topic,
+        question: currentQ.question,
+        selectedText: selectedOpt.text,
+        correctText: currentQ.correctText,
+        isCorrect,
+        explanation: explanationText
+      });
+
+      nextBtn.disabled = false;
+    }
+
+    nextBtn.addEventListener("click", () => {
+      if (!state.answered) return;
+      soundFX.click();
+
+      if (state.currentIndex + 1 < state.questions.length) {
+        state.currentIndex += 1;
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    });
+
+    function showResults() {
+      quizScreen.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+      soundFX.finish();
+
+      const total = state.questions.length;
+      const score = state.score;
+      const percentage = Math.round((score / total) * 100);
+
+      let grade = "جيد";
+      let emoji = "🌟";
+      let heading = `عمل رائع يا ${state.studentName}!`;
+
+      if (percentage >= 90) {
+        grade = "ممتاز جداً";
+        emoji = "🏆";
+        heading = `مبدع ومتميز يا ${state.studentName}!`;
+      } else if (percentage >= 75) {
+        grade = "جيد جداً";
+        emoji = "🥇";
+        heading = `أداء رائع يا ${state.studentName}!`;
+      } else if (percentage >= 60) {
+        grade = "جيد";
+        emoji = "👏";
+        heading = `بداية موفقة يا ${state.studentName}!`;
+      } else {
+        grade = "يحتاج إلى مراجعة";
+        emoji = "📚";
+        heading = `راجع الدروس وحاول مرة أخرى يا ${state.studentName}!`;
+      }
+
+      const sectionLabel = state.studentClass ? ` • الفصل: ${state.studentClass}` : "";
+      document.getElementById("resultEmoji").textContent = emoji;
+      document.getElementById("resultHeading").textContent = heading;
+      document.getElementById("resultStudentMeta").textContent = `${state.studentName}${sectionLabel}`;
+      document.getElementById("finalScoreDisplay").textContent = `${score} / ${total}`;
+      document.getElementById("finalPercentageDisplay").textContent = `النسبة: ${percentage}%`;
+      document.getElementById("gradeBadge").textContent = `التقدير: ${grade}`;
+
+      reviewList.innerHTML = "";
+      state.history.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = `p-4 rounded-2xl border-2 ${
+          item.isCorrect
+            ? "border-emerald-200 bg-emerald-50/50"
+            : "border-rose-200 bg-rose-50/50"
+        }`;
+
+        card.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700">
+              سؤال ${item.number} • ${item.topic}
+            </span>
+            <span class="text-xs font-black px-2.5 py-1 rounded-lg ${
+              item.isCorrect ? "bg-emerald-600 text-white" : "bg-rose-600 text-white"
+            }">
+              ${item.isCorrect ? "صحيح (+1)" : "خاطئ (0)"}
+            </span>
+          </div>
+          <p class="font-extrabold text-slate-900 text-sm sm:text-base mb-2">${item.question}</p>
+          <p class="text-xs sm:text-sm font-bold text-slate-700 mb-1">
+            إجابتك: <span class="${item.isCorrect ? "text-emerald-700" : "text-rose-700"}">${item.selectedText}</span>
+          </p>
+          ${
+            !item.isCorrect
+              ? `<p class="text-xs sm:text-sm font-bold text-emerald-800 mb-1">الإجابة الصحيحة: ${item.correctText}</p>`
+              : ""
+          }
+          <p class="text-xs text-slate-600 font-semibold mt-1.5 leading-relaxed">${item.explanation}</p>
+        `;
+
+        reviewList.appendChild(card);
+      });
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    retrySameStudentBtn.addEventListener("click", () => {
+      soundFX.click();
+      startQuiz();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    changeStudentBtn.addEventListener("click", () => {
+      soundFX.click();
+      resultScreen.classList.add("hidden");
+      quizScreen.classList.add("hidden");
+      startScreen.classList.remove("hidden");
+      studentNameInput.value = "";
+      studentClassInput.value = "";
+      studentNameInput.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
