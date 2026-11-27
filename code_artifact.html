@@ -1,0 +1,2623 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>مغامرة سكراتش في السوق - الصف الخامس الابتدائي</title>
+  <style>
+    /* استيراد خط عربي واضح وعصري متناغم مع أسلوب البكسل مع خطوط احتياطية نظيفة */
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap');
+
+    :root {
+      --bg-sky-top: #4fa3e3;
+      --bg-sky-bottom: #9cd4f7;
+      --pixel-dark: #1d1b26;
+      --pixel-panel: #fff9eb;
+      --pixel-border: #2c2738;
+      --gold: #ffd23f;
+      --gold-dark: #d99b00;
+      --green: #38b764;
+      --green-dark: #257a42;
+      --red: #e43b44;
+      --red-dark: #9e2835;
+      --blue: #29adff;
+      --purple: #9966ff;
+      --orange: #ffab19;
+      --cyan: #5cb1d6;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Cairo', 'Tahoma', 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #1a1824;
+      color: var(--pixel-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    /* إطار البكسل الكلاسيكي */
+    .pixel-box {
+      background: var(--pixel-panel);
+      border: 4px solid var(--pixel-border);
+      box-shadow:
+        inset -4px -4px 0px rgba(0, 0, 0, 0.12),
+        inset 4px 4px 0px rgba(255, 255, 255, 0.8),
+        0 6px 0 var(--pixel-border);
+      border-radius: 6px;
+    }
+
+    .pixel-btn {
+      border: 3px solid var(--pixel-border);
+      box-shadow:
+        inset -3px -3px 0px rgba(0, 0, 0, 0.2),
+        inset 3px 3px 0px rgba(255, 255, 255, 0.45),
+        0 4px 0 var(--pixel-border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform 0.08s ease, filter 0.12s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .pixel-btn:hover:not(:disabled) {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    .pixel-btn:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow:
+        inset -2px -2px 0px rgba(0, 0, 0, 0.2),
+        0 1px 0 var(--pixel-border);
+    }
+
+    .pixel-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* ================= الشريط العلوي ================= */
+    .top-hud {
+      background: #282336;
+      color: #fff;
+      border-bottom: 4px solid #120f1a;
+      padding: 8px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      z-index: 30;
+      position: sticky;
+      top: 0;
+    }
+
+    .game-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      color: var(--gold);
+      text-shadow: 2px 2px 0 #000;
+    }
+
+    .hud-stats {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .stat-pill {
+      background: #3b3450;
+      border: 2px solid #120f1a;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .progress-track {
+      width: 85px;
+      height: 12px;
+      background: #1a1624;
+      border: 2px solid #000;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38b764, #a7f070);
+      transition: width 0.35s ease;
+    }
+
+    .hud-tools {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .btn-tool-rule {
+      background: #9966ff;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 0.82rem;
+    }
+
+    .btn-tool-scale {
+      background: #ffab19;
+      color: #1d1b26;
+      padding: 5px 10px;
+      font-size: 0.82rem;
+    }
+
+    .btn-tool-sound {
+      background: #5cb1d6;
+      color: #1d1b26;
+      padding: 5px 10px;
+      font-size: 0.85rem;
+    }
+
+    .btn-tool-unlock {
+      background: #38b764;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 0.82rem;
+    }
+    .btn-tool-unlock.active-mode {
+      background: #ffd23f;
+      color: #1d1b26;
+    }
+
+    /* أزرار التنقل السريع بين المحطات أعلى السوق */
+    .quick-stage-tabs {
+      position: relative;
+      z-index: 12;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      max-width: 980px;
+      width: 100%;
+      margin: 0 auto 8px auto;
+    }
+
+    .stage-tab-btn {
+      background: #fff9eb;
+      color: #1d1b26;
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      border: 3px solid var(--pixel-border);
+      border-radius: 6px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 3px 0 var(--pixel-border);
+      transition: transform 0.1s ease, background 0.15s ease;
+    }
+
+    .stage-tab-btn:hover {
+      transform: translateY(-1px);
+      background: #fff;
+    }
+
+    .stage-tab-btn.active-tab {
+      background: var(--gold);
+      color: #1d1b26;
+      box-shadow: 0 3px 0 #1d1b26, 0 0 0 2px #fff;
+    }
+
+    .stage-tab-btn.completed-tab {
+      background: #9be5aa;
+    }
+
+    /* بانر إتمام المرحلة البارز */
+    .stage-complete-banner {
+      display: none;
+      background: linear-gradient(135deg, #fff3b0 0%, #ffd23f 100%);
+      border: 4px solid var(--pixel-border);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      box-shadow: 0 5px 0 var(--pixel-border);
+      animation: popIn 0.25s ease;
+      gap: 10px;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stage-complete-banner.show {
+      display: flex;
+    }
+
+    .btn-next-stage-big {
+      background: var(--green);
+      color: #fff;
+      padding: 11px 22px;
+      font-size: 1.05rem;
+      animation: pulseBtn 1.1s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseBtn {
+      from { transform: scale(1); }
+      to { transform: scale(1.04); }
+    }
+
+    /* ================= مشهد المدينة والسوق (Pixel Art) ================= */
+    .market-stage {
+      position: relative;
+      width: 100%;
+      min-height: 250px;
+      background: linear-gradient(180deg, #439be0 0%, #8fd3ff 68%, #63ab3f 68%, #4b8a2c 76%, #5a5368 76%, #453f52 100%);
+      border-bottom: 4px solid var(--pixel-border);
+      overflow: hidden;
+      padding: 12px 10px 44px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* سحب بكسل متحركة */
+    .pixel-cloud {
+      position: absolute;
+      background: #ffffff;
+      height: 16px;
+      width: 56px;
+      box-shadow:
+        0 -8px 0 -2px #ffffff,
+        10px -12px 0 0 #ffffff,
+        -10px 4px 0 0 #e3f3ff,
+        0 6px 0 0 rgba(0, 0, 0, 0.08);
+      opacity: 0.92;
+      animation: cloudMove 38s linear infinite;
+      pointer-events: none;
+    }
+    .cloud-1 { top: 18px; right: -80px; animation-duration: 42s; }
+    .cloud-2 { top: 44px; right: -120px; transform: scale(0.8); animation-duration: 55s; animation-delay: -18s; }
+
+    @keyframes cloudMove {
+      from { transform: translateX(120px); }
+      to { transform: translateX(calc(-100vw - 150px)); }
+    }
+
+    /* مباني المدينة في الخلفية */
+    .city-skyline {
+      position: absolute;
+      bottom: 32%;
+      left: 0;
+      right: 0;
+      height: 110px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      padding: 0 2%;
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    .building {
+      border: 3px solid #232030;
+      border-bottom: none;
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5px;
+      padding: 8px 6px;
+    }
+
+    .building::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 8px;
+      right: 8px;
+      height: 7px;
+      background: inherit;
+      border: 3px solid #232030;
+      border-bottom: none;
+    }
+
+    .b-win {
+      background: #ffe885;
+      border: 2px solid #232030;
+      height: 11px;
+    }
+    .b-win.dark { background: #3b4b6b; }
+
+    .b1 { width: 54px; height: 86px; background: #e07a5f; }
+    .b2 { width: 66px; height: 105px; background: #6d9dc5; }
+    .b3 { width: 50px; height: 74px; background: #f2cc8f; }
+    .b4 { width: 70px; height: 98px; background: #81b29a; }
+    .b5 { width: 56px; height: 82px; background: #b5838d; }
+
+    /* صف الأكشاك الأربعة */
+    .stalls-row {
+      position: relative;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      max-width: 980px;
+      width: 100%;
+      margin: 46px auto 0 auto;
+      align-items: end;
+    }
+
+    .stall-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .stall-card.active {
+      transform: translateY(-4px) scale(1.03);
+    }
+
+    .stall-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .stall-card.locked {
+      opacity: 0.92;
+    }
+
+    /* السهم الأصفر المتحرك فوق الكشك النشط */
+    .active-arrow {
+      position: absolute;
+      top: -42px;
+      width: 28px;
+      height: 28px;
+      animation: bounceArrow 0.75s infinite alternate ease-in-out;
+      filter: drop-shadow(0 3px 0 #1d1b26);
+      z-index: 10;
+    }
+
+    @keyframes bounceArrow {
+      from { transform: translateY(0px); }
+      to { transform: translateY(-9px); }
+    }
+
+    /* مظلة الكشك المخططة */
+    .stall-awning {
+      width: 100%;
+      max-width: 175px;
+      height: 24px;
+      border: 3px solid var(--pixel-border);
+      border-radius: 6px 6px 2px 2px;
+      position: relative;
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    .awning-fruits {
+      background: repeating-linear-gradient(90deg, #e43b44 0 14px, #fff9eb 14px 28px);
+    }
+    .awning-bakery {
+      background: repeating-linear-gradient(90deg, #ff9f1c 0 14px, #fff3b0 14px 28px);
+    }
+    .awning-spices {
+      background: repeating-linear-gradient(90deg, #2ec4b6 0 14px, #cbf3f0 14px 28px);
+    }
+    .awning-plaza {
+      background: repeating-linear-gradient(90deg, #9966ff 0 14px, #ffd23f 14px 28px);
+    }
+
+    .stall-body {
+      width: 90%;
+      max-width: 158px;
+      background: #d9a066;
+      border: 3px solid var(--pixel-border);
+      border-top: none;
+      padding: 6px 4px;
+      text-align: center;
+      box-shadow: inset -4px -4px 0 #b87e46;
+    }
+
+    .stall-card.active .stall-body {
+      background: #f4c07a;
+      box-shadow: inset -4px -4px 0 #cf934c, 0 0 0 3px var(--gold);
+    }
+
+    .stall-card.completed .stall-body {
+      background: #9be5aa;
+      box-shadow: inset -4px -4px 0 #66bd78;
+    }
+
+    .stall-goods {
+      font-size: 1.25rem;
+      line-height: 1.2;
+      margin-bottom: 2px;
+      letter-spacing: 2px;
+    }
+
+    .stall-title {
+      background: #282336;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 4px;
+      border-radius: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stall-status-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      margin-top: 3px;
+      color: #1d1b26;
+    }
+
+    /* الطريق وحافلة المدينة المتحركة */
+    .city-road {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 38px;
+      background: #464254;
+      border-top: 3px solid #282533;
+      overflow: hidden;
+    }
+
+    .road-dashes {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: repeating-linear-gradient(90deg, #ffd23f 0 26px, transparent 26px 52px);
+      transform: translateY(-50%);
+      opacity: 0.85;
+    }
+
+    .pixel-bus {
+      position: absolute;
+      bottom: 5px;
+      width: 84px;
+      height: 34px;
+      animation: busDrive 18s linear infinite;
+      z-index: 6;
+    }
+
+    @keyframes busDrive {
+      0% { left: -100px; }
+      45% { left: calc(50% - 42px); }
+      58% { left: calc(50% - 42px); } /* توقف قصير عند السوق */
+      100% { left: calc(100% + 100px); }
+    }
+
+    /* ================= منطقة اللعب الرئيسية ================= */
+    .main-arena {
+      flex: 1;
+      max-width: 1020px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 14px 12px 28px 12px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    /* بطاقة الشخصية الكرتونية (شاشة حاسوب بكسل) */
+    .mascot-panel {
+      padding: 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .mascot-stage-tag {
+      background: var(--blue);
+      color: #fff;
+      border: 2px solid var(--pixel-border);
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .monitor-wrapper {
+      position: relative;
+      width: 148px;
+      height: 152px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .monitor-wrapper.celebrate {
+      animation: mascotJump 0.45s infinite alternate ease-in-out;
+    }
+    .monitor-wrapper.worried {
+      animation: mascotShake 0.35s ease-in-out;
+    }
+
+    @keyframes mascotJump {
+      from { transform: translateY(0); }
+      to { transform: translateY(-10px); }
+    }
+
+    @keyframes mascotShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .speech-bubble {
+      margin-top: 8px;
+      background: #fff;
+      border: 3px solid var(--pixel-border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--pixel-dark);
+      width: 100%;
+      position: relative;
+    }
+
+    .speech-bubble::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 0 8px 8px 8px;
+      border-style: solid;
+      border-color: transparent transparent var(--pixel-border) transparent;
+    }
+
+    /* بطاقة الأسئلة والتحدي */
+    .quiz-panel {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .quiz-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 3px dashed #cbbba0;
+      padding-bottom: 10px;
+    }
+
+    .topic-badge {
+      background: var(--gold);
+      border: 2px solid var(--pixel-border);
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-weight: 900;
+      font-size: 0.9rem;
+    }
+
+    .q-counter {
+      background: #282336;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .question-text {
+      font-size: 1.12rem;
+      font-weight: 800;
+      line-height: 1.6;
+      color: #1d1b26;
+      margin: 4px 0;
+    }
+
+    /* تمثيل بصري للبنة سكراتش داخل السؤال عند الحاجة */
+    .scratch-visual-box {
+      background: #eef6ff;
+      border: 3px solid #7ea8d6;
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .s-block {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: #fff;
+      border: 2px solid rgba(0, 0, 0, 0.28);
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.18);
+    }
+    .s-looks { background: #9966ff; }
+    .s-sensing { background: #5cb1d6; }
+    .s-operators { background: #59c059; border-radius: 16px; }
+    .s-control { background: #ffab19; color: #1d1b26; }
+    .s-events { background: #ffbf00; color: #1d1b26; }
+    .s-slot {
+      background: #fff;
+      color: #1d1b26;
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-weight: 900;
+      border: 1px solid rgba(0,0,0,0.2);
+    }
+
+    /* خيارات الإجابة */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .option-btn {
+      background: #ffffff;
+      color: #1d1b26;
+      padding: 12px 14px;
+      text-align: right;
+      justify-content: flex-start;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      min-height: 54px;
+    }
+
+    .option-btn .opt-letter {
+      background: #e6dec8;
+      border: 2px solid var(--pixel-border);
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .option-btn.correct {
+      background: var(--green) !important;
+      color: #fff !important;
+      border-color: #133b20 !important;
+    }
+    .option-btn.correct .opt-letter {
+      background: #1c6b36;
+      color: #fff;
+    }
+
+    .option-btn.wrong {
+      background: var(--red) !important;
+      color: #fff !important;
+      border-color: #541116 !important;
+    }
+    .option-btn.wrong .opt-letter {
+      background: #871c22;
+      color: #fff;
+    }
+
+    /* صندوق التغذية الراجعة */
+    .feedback-banner {
+      display: none;
+      padding: 12px 14px;
+      border-radius: 6px;
+      border: 3px solid var(--pixel-border);
+      font-weight: 800;
+      line-height: 1.5;
+      animation: popIn 0.2s ease;
+    }
+
+    .feedback-banner.show {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .feedback-banner.fb-success {
+      background: #d8f8e1;
+      border-color: var(--green-dark);
+      color: #134724;
+    }
+
+    .feedback-banner.fb-error {
+      background: #ffe0e2;
+      border-color: var(--red-dark);
+      color: #6e141a;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .next-btn-wrap {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
+
+    .btn-next {
+      background: var(--gold);
+      color: #1d1b26;
+      padding: 10px 20px;
+      font-size: 1rem;
+    }
+
+    /* ================= النوافذ المنبثقة (Bmodals) ================= */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 15, 26, 0.82);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-card {
+      max-width: 650px;
+      width: 100%;
+      padding: 18px;
+      position: relative;
+      max-height: 92vh;
+      overflow-y: auto;
+      animation: popIn 0.22s ease;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid var(--pixel-border);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+
+    .modal-title {
+      font-size: 1.18rem;
+      font-weight: 900;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-close {
+      background: var(--red);
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      font-size: 1.1rem;
+    }
+
+    /* شاشة البداية */
+    .start-hero {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pixel-input {
+      width: 100%;
+      max-width: 340px;
+      padding: 12px 14px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      border: 4px solid var(--pixel-border);
+      border-radius: 6px;
+      text-align: center;
+      background: #fff;
+      color: #1d1b26;
+      outline: none;
+    }
+
+    .pixel-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(41, 173, 255, 0.35);
+    }
+
+    .name-error {
+      color: var(--red);
+      font-weight: 800;
+      font-size: 0.88rem;
+      display: none;
+    }
+
+    .btn-start-game {
+      background: var(--green);
+      color: #fff;
+      padding: 12px 28px;
+      font-size: 1.15rem;
+    }
+
+    /* بطاقة القاعدة الذكية */
+    .rule-section {
+      background: #fff;
+      border: 3px solid var(--pixel-border);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .rule-section h4 {
+      margin: 0 0 8px 0;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .rule-section p {
+      margin: 6px 0 0 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #3a3548;
+    }
+
+    /* مختبر الميزان التفاعلي */
+    .scale-lab-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .scale-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #e9f5db;
+      border: 3px solid var(--pixel-border);
+      padding: 12px;
+      border-radius: 6px;
+      width: 100%;
+    }
+
+    .scale-num-input {
+      width: 78px;
+      padding: 8px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      text-align: center;
+      border: 3px solid var(--pixel-border);
+      border-radius: 6px;
+    }
+
+    .op-selector {
+      display: flex;
+      gap: 6px;
+    }
+
+    .op-btn {
+      background: #fff;
+      width: 42px;
+      height: 42px;
+      font-size: 1.25rem;
+    }
+    .op-btn.selected {
+      background: #59c059;
+      color: #fff;
+    }
+
+    .scale-visual {
+      width: 100%;
+      max-width: 360px;
+      height: 150px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .scale-beam {
+      width: 240px;
+      height: 10px;
+      background: #d99b00;
+      border: 3px solid var(--pixel-border);
+      position: relative;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 58px;
+    }
+
+    .scale-pan {
+      width: 68px;
+      height: 36px;
+      background: #ffd23f;
+      border: 3px solid var(--pixel-border);
+      border-radius: 4px 4px 14px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.05rem;
+      margin-top: 34px;
+    }
+
+    .scale-pillar {
+      position: absolute;
+      bottom: 14px;
+      width: 16px;
+      height: 66px;
+      background: #5a5368;
+      border: 3px solid var(--pixel-border);
+    }
+
+    .scale-base {
+      width: 120px;
+      height: 16px;
+      background: #282336;
+      border: 3px solid #000;
+      border-radius: 4px;
+    }
+
+    .scale-result-box {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: 3px solid var(--pixel-border);
+      text-align: center;
+      font-weight: 800;
+    }
+
+    /* ================= شهادة الإنجاز الختامية ================= */
+    .certificate-frame {
+      background: linear-gradient(135deg, #fffdf5 0%, #fff4d2 100%);
+      border: 6px solid #d99b00;
+      outline: 4px solid var(--pixel-border);
+      border-radius: 8px;
+      padding: 20px 16px;
+      text-align: center;
+      position: relative;
+      box-shadow: inset 0 0 0 4px #ffd23f;
+      margin: 10px 0;
+    }
+
+    .cert-corner {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: #e43b44;
+      border: 2px solid var(--pixel-border);
+    }
+    .c-tl { top: 6px; left: 6px; }
+    .c-tr { top: 6px; right: 6px; }
+    .c-bl { bottom: 6px; left: 6px; }
+    .c-br { bottom: 6px; right: 6px; }
+
+    .cert-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #9e2835;
+      margin: 4px 0;
+    }
+
+    .cert-student-name {
+      display: inline-block;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #1d1b26;
+      background: #ffe885;
+      border-bottom: 4px solid #d99b00;
+      padding: 4px 22px;
+      margin: 8px 0;
+      border-radius: 4px;
+    }
+
+    .cert-author {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 2px dashed #c49a2c;
+      font-weight: 900;
+      font-size: 1rem;
+      color: #282336;
+    }
+
+    /* التجاوب مع الشاشات الصغيرة والجوال */
+    @media (max-width: 768px) {
+      .main-arena {
+        grid-template-columns: 1fr;
+      }
+      .mascot-panel {
+        flex-direction: row;
+        text-align: right;
+        gap: 12px;
+        padding: 10px;
+      }
+      .monitor-wrapper {
+        width: 104px;
+        height: 108px;
+        flex-shrink: 0;
+      }
+      .speech-bubble {
+        margin-top: 0;
+      }
+      .speech-bubble::before {
+        display: none;
+      }
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      .stalls-row {
+      position: relative;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      max-width: 980px;
+      width: 100%;
+      margin: 34px auto 0 auto;
+      align-items: end;
+    }
+
+    /* الطريق وحافلة المدينة المتحركة */
+      body * {
+        visibility: hidden;
+      }
+      #certificatePrintArea, #certificatePrintArea * {
+        visibility: visible;
+      }
+      #certificatePrintArea {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= الشريط العلوي ================= -->
+  <header class="top-hud">
+    <div class="game-brand">
+      <!-- أيقونة قط سكراتش / نجمة بكسل -->
+      <svg width="26" height="26" viewBox="0 0 16 16" shape-rendering="crispEdges">
+        <rect x="2" y="2" width="12" height="12" fill="#ffab19" stroke="#000" stroke-width="1"/>
+        <rect x="4" y="5" width="2" height="3" fill="#000"/>
+        <rect x="10" y="5" width="2" height="3" fill="#000"/>
+        <rect x="6" y="10" width="4" height="2" fill="#e43b44"/>
+      </svg>
+      <span>مغامرة سكراتش في السوق</span>
+    </div>
+
+    <div class="hud-stats">
+      <div class="stat-pill" title="اسم الطالب/ة">
+        <span>👤</span>
+        <span id="hudStudentName" style="color:#9cd4f7;">بطل سكراتش</span>
+      </div>
+
+      <div class="stat-pill" title="المرحلة الحالية">
+        <span>🏪 المرحلة:</span>
+        <span id="hudStageText" style="color:#ffd23f;">1 / 4</span>
+      </div>
+
+      <div class="stat-pill" title="النقاط المحققة">
+        <span>⭐ النقاط:</span>
+        <span id="hudScoreText" style="color:#a7f070;">0 / 40</span>
+      </div>
+
+      <div class="stat-pill" title="شريط التقدم">
+        <div class="progress-track">
+          <div id="hudProgressBar" class="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hud-tools">
+      <button id="unlockAllBtn" class="pixel-btn btn-tool-unlock" onclick="toggleFreeExplore()" title="فتح جميع الأكشاك للتنقل الحر">
+        🔓 فتح كل الأكشاك
+      </button>
+      <button class="pixel-btn btn-tool-rule" onclick="openModal('ruleModal')" title="بطاقة القاعدة الذكية">
+        📘 القاعدة الذكية
+      </button>
+      <button class="pixel-btn btn-tool-scale" onclick="openModal('scaleModal')" title="مختبر الميزان التفاعلي">
+        ⚖️ مختبر الميزان
+      </button>
+      <button class="pixel-btn btn-next" style="padding: 5px 10px; font-size: 0.82rem;" onclick="showEndCertificate()" title="عرض شهادة الإنجاز">
+        🏆 الشهادة
+      </button>
+      <button id="soundToggleBtn" class="pixel-btn btn-tool-sound" onclick="toggleSound()" title="تشغيل أو كتم الصوت">
+        🔊 الصوت
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= مشهد المدينة والسوق التفاعلي ================= -->
+  <section class="market-stage" aria-label="مشهد السوق والمدينة">
+    <div class="pixel-cloud cloud-1"></div>
+    <div class="pixel-cloud cloud-2"></div>
+
+    <!-- أزرار الوصول السريع للمحطات الأربع -->
+    <nav class="quick-stage-tabs" id="quickStageTabs" aria-label="التنقل السريع بين المحطات"></nav>
+
+    <!-- مباني خلفية -->
+    <div class="city-skyline">
+      <div class="building b1"><div class="b-win"></div><div class="b-win dark"></div><div class="b-win"></div><div class="b-win"></div></div>
+      <div class="building b2"><div class="b-win dark"></div><div class="b-win"></div><div class="b-win"></div><div class="b-win"></div><div class="b-win dark"></div><div class="b-win"></div></div>
+      <div class="building b3"><div class="b-win"></div><div class="b-win"></div><div class="b-win dark"></div><div class="b-win"></div></div>
+      <div class="building b4"><div class="b-win"></div><div class="b-win dark"></div><div class="b-win"></div><div class="b-win"></div></div>
+      <div class="building b5"><div class="b-win dark"></div><div class="b-win"></div><div class="b-win"></div><div class="b-win"></div></div>
+    </div>
+
+    <!-- الأكشاك الأربعة (محطات اللعب) -->
+    <div class="stalls-row" id="stallsContainer">
+      <!-- يتم بناؤها وتحديثها ديناميكياً عبر JS -->
+    </div>
+
+    <!-- الطريق وحافلة المدينة -->
+    <div class="city-road">
+      <div class="road-dashes"></div>
+      <svg class="pixel-bus" viewBox="0 0 42 18" shape-rendering="crispEdges">
+        <!-- جسم الحافلة -->
+        <rect x="2" y="2" width="38" height="11" fill="#ffd23f" stroke="#1d1b26" stroke-width="1"/>
+        <rect x="2" y="8" width="38" height="2" fill="#e43b44"/>
+        <!-- نوافذ -->
+        <rect x="5" y="4" width="5" height="3" fill="#9cd4f7" stroke="#1d1b26" stroke-width="0.6"/>
+        <rect x="12" y="4" width="5" height="3" fill="#9cd4f7" stroke="#1d1b26" stroke-width="0.6"/>
+        <rect x="19" y="4" width="5" height="3" fill="#9cd4f7" stroke="#1d1b26" stroke-width="0.6"/>
+        <rect x="26" y="4" width="5" height="3" fill="#9cd4f7" stroke="#1d1b26" stroke-width="0.6"/>
+        <rect x="33" y="4" width="5" height="4" fill="#9cd4f7" stroke="#1d1b26" stroke-width="0.6"/>
+        <!-- عجلات -->
+        <rect x="7" y="12" width="6" height="5" fill="#1d1b26"/>
+        <rect x="9" y="14" width="2" height="2" fill="#cbd5e1"/>
+        <rect x="29" y="12" width="6" height="5" fill="#1d1b26"/>
+        <rect x="31" y="14" width="2" height="2" fill="#cbd5e1"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ================= ساحة اللعب الرئيسية ================= -->
+  <main class="main-arena">
+    <!-- الشخصية الرئيسية: شاشة حاسوب بكسل بتعابير ديناميكية -->
+    <aside class="pixel-box mascot-panel">
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <span class="mascot-stage-tag" id="mascotMoodLabel">المساعد الرقمي</span>
+        <div class="monitor-wrapper" id="mascotWrapper">
+          <!-- SVG بكسل لشاشة حاسوب مكتبية كلاسيكية -->
+          <svg id="mascotSvg" width="136" height="140" viewBox="0 0 32 34" shape-rendering="crispEdges">
+            <!-- نجوم الاحتفال (تظهر عند الفوز) -->
+            <g id="celebrateStars" style="display:none;">
+              <rect x="1" y="2" width="3" height="3" fill="#ffd23f"/>
+              <rect x="28" y="1" width="3" height="3" fill="#ffd23f"/>
+              <rect x="0" y="14" width="2" height="2" fill="#a7f070"/>
+              <rect x="30" y="13" width="2" height="2" fill="#ff77a8"/>
+            </g>
+
+            <!-- هيكل الشاشة الخارجي -->
+            <rect x="4" y="3" width="24" height="20" fill="#e6dec8" stroke="#1d1b26" stroke-width="1.5"/>
+            <rect x="5" y="4" width="22" height="2" fill="#ffffff"/>
+            <!-- إطار الشاشة الداخلي -->
+            <rect x="6" y="6" width="20" height="14" id="screenBg" fill="#29adff" stroke="#1d1b26" stroke-width="1.2"/>
+
+            <!-- تعابير الوجه الديناميكية -->
+            <!-- 1. الحالة العادية: مبتسم -->
+            <g id="faceNormal">
+              <rect x="10" y="10" width="2" height="3" fill="#1d1b26"/>
+              <rect x="20" y="10" width="2" height="3" fill="#1d1b26"/>
+              <rect x="8" y="13" width="2" height="1" fill="#ff77a8"/>
+              <rect x="22" y="13" width="2" height="1" fill="#ff77a8"/>
+              <rect x="12" y="15" width="8" height="1.5" fill="#1d1b26"/>
+              <rect x="11" y="14" width="1.5" height="1.5" fill="#1d1b26"/>
+              <rect x="19.5" y="14" width="1.5" height="1.5" fill="#1d1b26"/>
+            </g>
+
+            <!-- 2. الحالة السعيدة: إجابة صحيحة -->
+            <g id="faceHappy" style="display:none;">
+              <!-- عيون مقوسة سعيدة -->
+              <rect x="9" y="10" width="4" height="1.5" fill="#1d1b26"/>
+              <rect x="10" y="9" width="2" height="1.5" fill="#1d1b26"/>
+              <rect x="19" y="10" width="4" height="1.5" fill="#1d1b26"/>
+              <rect x="20" y="9" width="2" height="1.5" fill="#1d1b26"/>
+              <!-- فم ضاحك كبير -->
+              <rect x="11" y="14" width="10" height="3.5" fill="#1d1b26"/>
+              <rect x="13" y="16" width="6" height="1.5" fill="#e43b44"/>
+            </g>
+
+            <!-- 3. الحالة القلقة: إجابة خاطئة مع قطرة عرق -->
+            <g id="faceWorried" style="display:none;">
+              <!-- حواجب قلقة -->
+              <rect x="9" y="8" width="3" height="1" fill="#1d1b26"/>
+              <rect x="20" y="8" width="3" height="1" fill="#1d1b26"/>
+              <!-- عيون متسعة -->
+              <rect x="10" y="10" width="2.5" height="3" fill="#fff"/>
+              <rect x="10.8" y="11" width="1.2" height="1.5" fill="#1d1b26"/>
+              <rect x="19.5" y="10" width="2.5" height="3" fill="#fff"/>
+              <rect x="20.2" y="11" width="1.2" height="1.5" fill="#1d1b26"/>
+              <!-- فم متموج قلق -->
+              <rect x="12" y="15.5" width="2" height="1.2" fill="#1d1b26"/>
+              <rect x="14" y="14.5" width="4" height="1.2" fill="#1d1b26"/>
+              <rect x="18" y="15.5" width="2" height="1.2" fill="#1d1b26"/>
+              <!-- قطرة عرق زرقاء -->
+              <rect x="23.5" y="8" width="1.5" height="3" fill="#4fa3e3"/>
+              <rect x="23" y="9.5" width="2.5" height="2" fill="#9cd4f7"/>
+            </g>
+
+            <!-- أزرار الشاشة السفلية -->
+            <rect x="22" y="21" width="2" height="1" fill="#38b764"/>
+            <rect x="19" y="21" width="2" height="1" fill="#e43b44"/>
+
+            <!-- رقبة وقاعدة الشاشة -->
+            <rect x="13" y="23" width="6" height="3" fill="#b8ae98" stroke="#1d1b26" stroke-width="1.2"/>
+            <rect x="8" y="26" width="16" height="3" fill="#e6dec8" stroke="#1d1b26" stroke-width="1.2"/>
+            <!-- لوحة مفاتيح بكسل صغيرة -->
+            <rect x="6" y="30" width="20" height="3" fill="#d4cbb4" stroke="#1d1b26" stroke-width="1.2"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="speech-bubble" id="mascotSpeech">
+        أهلاً بكِ في سوق سكراتش! هيا نبدأ مغامرتنا البرمجية.
+      </div>
+    </aside>
+
+    <!-- بطاقة الأسئلة التفاعلية -->
+    <section class="pixel-box quiz-panel" aria-live="polite">
+      <div class="quiz-header">
+        <span class="topic-badge" id="stageTopicBadge">🏪 كشك الفواكه: كيفية تصميم برنامج</span>
+        <span class="q-counter" id="questionCounter">السؤال 1 من 3</span>
+      </div>
+
+      <div class="question-text" id="questionText">
+        جاري تحميل السؤال...
+      </div>
+
+      <div id="visualBlockContainer" style="display:none;"></div>
+
+      <div class="options-grid" id="optionsContainer"></div>
+
+      <div class="feedback-banner" id="feedbackBanner">
+        <div id="feedbackTitle" style="font-size:1.02rem;"></div>
+        <div id="feedbackDetail" style="font-size:0.9rem; font-weight:700;"></div>
+      </div>
+
+      <!-- بانر إتمام المرحلة والانتقال الفوري للمحطة التالية -->
+      <div class="stage-complete-banner" id="stageCompleteBanner">
+        <div style="font-size:1.15rem; font-weight:900; color:#1d1b26;" id="stageCompleteTitle">
+          🎉 أحسنتِ! أتممتِ تحديات هذه المحطة بنجاح!
+        </div>
+        <div style="font-size:0.9rem; font-weight:700; color:#3b3450;" id="stageCompleteSub">
+          تم فتح المحطة التالية في السوق، اضغطي للمتابعة!
+        </div>
+        <button id="nextStageBigBtn" class="pixel-btn btn-next-stage-big" onclick="handleNextStep()">
+          الانتقال إلى المحطة التالية 🏪⬅️
+        </button>
+      </div>
+
+      <div class="next-btn-wrap">
+        <button id="nextQuestionBtn" class="pixel-btn btn-next" style="display:none;" onclick="handleNextStep()">
+          السؤال التالي ⬅️
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= نافذة البداية (إدخال الاسم إلزامي) ================= -->
+  <div class="modal-overlay open" id="startModal">
+    <div class="pixel-box modal-card">
+      <div class="start-hero">
+        <div style="font-size:2.4rem;">🏪🖥️✨</div>
+        <h1 style="margin:0; font-size:1.55rem; color:#1d1b26;">مغامرة سكراتش في السوق</h1>
+        <p style="margin:0; font-weight:700; color:#453f52; line-height:1.6;">
+          مرحباً يا مبرمجتي الصغيرة / مبرمجي الصغير في الصف الخامس الابتدائي!<br>
+          تنقّل بين أكشاك السوق الأربعة وأجب عن التحديات لتحصل على شهادة التفوق في <strong>سكراتش</strong>.
+        </p>
+
+        <div style="background:#fff3cd; border:2px solid #d99b00; border-radius:6px; padding:8px 14px; font-size:0.88rem; font-weight:800;">
+          📚 المهارات الرقمية — الفصل الأول: تصميم البرنامج • الكائنات • المعاملات الشرطية
+        </div>
+
+        <label for="studentNameInput" style="font-weight:900; font-size:1rem; margin-top:4px;">
+          اكتبي اسمكِ / اكتب اسمك للبدء وطباعة الشهادة:
+        </label>
+        <input
+          type="text"
+          id="studentNameInput"
+          class="pixel-input"
+          placeholder="مثال: سارة أحمد"
+          maxlength="35"
+          onkeydown="if(event.key==='Enter') startGame()"
+        />
+        <div id="nameErrorMsg" class="name-error">⚠️ الرجاء إدخال اسم الطالبة أو الطالب أولاً للبدء!</div>
+
+        <button class="pixel-btn btn-start-game" onclick="startGame()">
+          🚀 ابدأ المغامرة الآن
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= نافذة بطاقة القاعدة الذكية ================= -->
+  <div class="modal-overlay" id="ruleModal" onclick="if(event.target===this) closeModal('ruleModal')">
+    <div class="pixel-box modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">📘 بطاقة القاعدة الذكية — لبنات سكراتش</h3>
+        <button class="pixel-btn btn-close" onclick="closeModal('ruleModal')">✕</button>
+      </div>
+
+      <div class="rule-section">
+        <h4 style="color:#7744dd;">🟣 1. لبنات المظهر (Looks) — اللون البنفسجي</h4>
+        <div>
+          <span class="s-block s-looks">قل <span class="s-slot">السلام عليكم!</span> لمدة <span class="s-slot">2</span> ثانية</span>
+          <span class="s-block s-looks" style="margin-top:4px;">المظهر التالي</span>
+        </div>
+        <p>تُستخدم لجعل الكائن يتحدث في فقاعة نصية، أو يغيّر شكله وحجمه ومظهره على المنصة.</p>
+      </div>
+
+      <div class="rule-section">
+        <h4 style="color:#2b86b0;">🔵 2. لبنات السؤال والاستشعار (Sensing) — اللون الأزرق الفاتح</h4>
+        <div>
+          <span class="s-block s-sensing">اسأل <span class="s-slot">كم عمرك؟</span> وانتظر</span>
+          <span class="s-block s-sensing" style="border-radius:16px; margin-right:6px;">الإجابة</span>
+        </div>
+        <p>تُظهر مربع إدخال للمستخدم ليكتب إجابته، وتُحفظ القيمة المدخلة داخل لبنة <strong>(الإجابة)</strong>.</p>
+      </div>
+
+      <div class="rule-section">
+        <h4 style="color:#369636;">🟢 3. لبنات المقارنة والشرط — العمليات (أخضر) + التحكم (برتقالي)</h4>
+        <div style="display:flex; flex-direction:column; align-items:flex-start; gap:6px;">
+          <div>
+            <span class="s-block s-operators"><span class="s-slot">الإجابة</span> = <span class="s-slot">10</span></span>
+            <span class="s-block s-operators"><span class="s-slot">الدرجة</span> &gt; <span class="s-slot">5</span></span>
+            <span class="s-block s-operators"><span class="s-slot">العمر</span> &lt; <span class="s-slot">12</span></span>
+          </div>
+          <span class="s-block s-control">إذا &lt; الشرط &gt; ثم ... وإلا ...</span>
+        </div>
+        <p>تُقارن بين قيمتين وتُرجع <strong>(صحيح)</strong> أو <strong>(خطأ)</strong>؛ فإذا تحقق الشرط يُنفّذ الجزء الأول، وإلا يُنفّذ الجزء الثاني.</p>
+      </div>
+
+      <div class="rule-section">
+        <h4 style="color:#b57300;">🟠 4. الحركة، رسائل البث، والاستشعار (الحركة • الأحداث • الاستشعار)</h4>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="s-block s-events">بث <span class="s-slot">رسالة</span></span>
+          <span class="s-block s-events">عندما أتلقى <span class="s-slot">رسالة</span></span>
+          <span class="s-block s-sensing">ملامس لـ <span class="s-slot">الفأرة</span>؟</span>
+          <span class="s-block s-sensing">ملامس للون؟</span>
+        </div>
+        <p>تُستخدم أنماط الدوران و<strong>(ارتد إذا كنت عند الحافة)</strong> للحركة، ولبنات البث لتنسيق الأحداث بين الكائنات، ولبنات الاستشعار للتحقق من التلامس.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= نافذة مختبر الميزان التفاعلي ================= -->
+  <div class="modal-overlay" id="scaleModal" onclick="if(event.target===this) closeModal('scaleModal')">
+    <div class="pixel-box modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">⚖️ مختبر الميزان للمعاملات الشرطية</h3>
+        <button class="pixel-btn btn-close" onclick="closeModal('scaleModal')">✕</button>
+      </div>
+
+      <p style="margin-top:0; font-weight:700; font-size:0.92rem; color:#3a3548;">
+        جرّبي تغيير الرقمين ومعامل المقارنة لمشاهدة كيف يحكم برنامج سكراتش على الشرط!
+      </p>
+
+      <div class="scale-lab-box">
+        <div class="scale-controls">
+          <div>
+            <div style="font-size:0.78rem; font-weight:800; text-align:center;">القيمة الأولى</div>
+            <input type="number" id="scaleValA" class="scale-num-input" value="10" oninput="updateScaleLab()" />
+          </div>
+
+          <div>
+            <div style="font-size:0.78rem; font-weight:800; text-align:center;">المعامل الشرطي</div>
+            <div class="op-selector">
+              <button class="pixel-btn op-btn selected" id="opBtnGt" onclick="setScaleOp('>')">&gt;</button>
+              <button class="pixel-btn op-btn" id="opBtnEq" onclick="setScaleOp('=')">=</button>
+              <button class="pixel-btn op-btn" id="opBtnLt" onclick="setScaleOp('<')">&lt;</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:0.78rem; font-weight:800; text-align:center;">القيمة الثانية</div>
+            <input type="number" id="scaleValB" class="scale-num-input" value="6" oninput="updateScaleLab()" />
+          </div>
+        </div>
+
+        <!-- رسم الميزان المتحرك -->
+        <div class="scale-visual">
+          <div class="scale-beam" id="scaleBeam">
+            <div class="scale-pan" id="panLeft">10</div>
+            <div class="scale-pan" id="panRight">6</div>
+          </div>
+          <div class="scale-pillar"></div>
+          <div class="scale-base"></div>
+        </div>
+
+        <!-- لبنة سكراتش الحية -->
+        <div>
+          <span class="s-block s-operators" style="font-size:1.05rem;">
+            <span class="s-slot" id="liveBlockA">10</span>
+            <span id="liveBlockOp" style="padding:0 6px;">&gt;</span>
+            <span class="s-slot" id="liveBlockB">6</span>
+          </span>
+        </div>
+
+        <div class="scale-result-box" id="scaleResultBox">
+          النتيجة: صحيح (True)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= شاشة الختام وشهادة الإنجاز ================= -->
+  <div class="modal-overlay" id="endModal">
+    <div class="pixel-box modal-card" style="max-width:680px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🏆 تهانينا! أتممتِ مغامرة سكراتش بنجاح</h3>
+        <button class="pixel-btn btn-tool-scale" onclick="editStudentName()" style="font-size:0.8rem;">✏️ تعديل الاسم</button>
+      </div>
+
+      <!-- مربع تعديل الاسم السريع عند الرغبة -->
+      <div id="editNameBox" style="display:none; margin-bottom:10px; text-align:center;">
+        <input type="text" id="editNameInput" class="pixel-input" style="max-width:260px; padding:6px 10px; font-size:0.95rem;" />
+        <button class="pixel-btn btn-start-game" style="padding:6px 14px; font-size:0.9rem;" onclick="saveEditedName()">حفظ</button>
+      </div>
+
+      <!-- الشهادة المزخرفة القابلة للطباعة -->
+      <div id="certificatePrintArea" class="certificate-frame">
+        <div class="cert-corner c-tl"></div>
+        <div class="cert-corner c-tr"></div>
+        <div class="cert-corner c-bl"></div>
+        <div class="cert-corner c-br"></div>
+
+        <div style="font-size:2rem;">🌟🏅🌟</div>
+        <div class="cert-title">شهادة إنجاز وتفوق رقمي</div>
+        <div style="font-size:0.92rem; font-weight:800; color:#5a5368;">مادة المهارات الرقمية — الصف الخامس الابتدائي</div>
+
+        <p style="margin:10px 0 4px 0; font-weight:800; font-size:1rem;">
+          تُمنح هذه الشهادة بكل فخر واعتزاز إلى المبرمجـ/ـة المبدعـ/ـة:
+        </p>
+
+        <div class="cert-student-name" id="certStudentName">اسم الطالب/ة</div>
+
+        <p style="margin:6px auto; max-width:500px; font-weight:700; font-size:0.95rem; line-height:1.6;">
+          لاجتياز جميع محطات <strong>«مغامرة سكراتش في السوق»</strong> وإتقان مهارات:
+          <br>
+          (كيفية تصميم برنامج • الكائنات في سكراتش • المعاملات الشرطية)
+        </p>
+
+        <div style="display:inline-flex; gap:14px; background:#fff; border:3px solid #d99b00; padding:8px 18px; border-radius:6px; margin-top:6px; font-weight:900;">
+          <span>⭐ النقاط: <span id="certScore">40 / 40</span></span>
+          <span>🎖️ التقدير: <span id="certGrade">ممتاز</span></span>
+        </div>
+
+        <div class="cert-author">
+          إعداد: روان المنصور
+        </div>
+      </div>
+
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:14px;">
+        <button class="pixel-btn btn-start-game" onclick="restartGame()">
+          🔄 إعادة اللعب من جديد
+        </button>
+        <button class="pixel-btn btn-tool-scale" onclick="window.print()" style="padding:12px 20px; font-size:1rem;">
+          🖨️ طباعة / حفظ الشهادة
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =====================================================================
+       1. محرك المؤثرات الصوتية 8-Bit عبر Web Audio API (بدون أي مكتبات)
+       ===================================================================== */
+    let audioCtx = null;
+    let isMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playTone(freq, duration, type = 'square', delay = 0, vol = 0.08) {
+      if (isMuted) return;
+      initAudio();
+      if (!audioCtx) return;
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+
+      gain.gain.setValueAtTime(vol, audioCtx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(audioCtx.currentTime + delay);
+      osc.stop(audioCtx.currentTime + delay + duration);
+    }
+
+    function playSound(effect) {
+      if (isMuted) return;
+      if (effect === 'click') {
+        playTone(520, 0.07, 'square', 0, 0.05);
+      } else if (effect === 'correct') {
+        // نغمة فوز 8-bit مبهجة
+        playTone(523.25, 0.11, 'square', 0, 0.08);
+        playTone(659.25, 0.11, 'square', 0.1, 0.08);
+        playTone(783.99, 0.18, 'square', 0.2, 0.09);
+      } else if (effect === 'wrong') {
+        // نغمة تنبيه لطيفة
+        playTone(280, 0.15, 'triangle', 0, 0.09);
+        playTone(210, 0.22, 'triangle', 0.14, 0.09);
+      } else if (effect === 'stageClear') {
+        // موسيقى إتمام المرحلة
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((n, idx) => playTone(n, 0.14, 'square', idx * 0.11, 0.09));
+      }
+    }
+
+    function toggleSound() {
+      isMuted = !isMuted;
+      const btn = document.getElementById('soundToggleBtn');
+      btn.textContent = isMuted ? '🔇 صامت' : '🔊 الصوت';
+      if (!isMuted) playSound('click');
+    }
+
+    /* =====================================================================
+       2. قاعدة بيانات المراحل والأسئلة (منهج المهارات الرقمية - خامس ابتدائي)
+       ===================================================================== */
+    const STAGES_DATA = [
+      {
+        id: 0,
+        stallName: 'كشك الفواكه',
+        topic: 'كيفية تصميم برنامج',
+        awningClass: 'awning-fruits',
+        goods: '🍎🍌🍇🍊',
+        questions: [
+          {
+            text: 'ما الخطوة الأولى الصحيحة التي نبدأ بها عند تصميم أي برنامج حاسوبي لحل مشكلة؟',
+            options: [
+              'تحديد المشكلة والهدف المطلوب من البرنامج',
+              'تلوين خلفية المنصة مباشرة',
+              'إغلاق برنامج سكراتش وحذف الكائنات',
+              'نشر البرنامج على الإنترنت قبل تجربته'
+            ],
+            correctIndex: 0,
+            hint: 'تبدأ خطوات تصميم البرنامج دائماً بفهم وتحديد المشكلة بدقة قبل كتابة الأوامر.'
+          },
+          {
+            text: 'تُسمّى مجموعة الخطوات المتسلسلة والمنطقية المكتوبة لحل مشكلة ما بـ:',
+            options: [
+              'المظهر التالي',
+              'الخوارزمية',
+              'حجم الكائن',
+              'المنصة'
+            ],
+            correctIndex: 1,
+            hint: 'الخوارزمية هي قائمة من التعليمات المتسلسلة خطوة بخطوة لحل المشكلة.'
+          },
+          {
+            text: 'ما التمثيل الرسومي الذي يستخدم أشكالاً هندسية وأسهماً لتوضيح خطوات الخوارزمية قبل البرمجة؟',
+            options: [
+              'قائمة المظاهر',
+              'مكتبة الأصوات',
+              'المخطط الانسيابي',
+              'شريط العنوان'
+            ],
+            correctIndex: 2,
+            hint: 'المخطط الانسيابي يمثّل خطوات الخوارزمية بصرياً باستخدام أشكال مثل البداية والنهاية والقرار.'
+          },
+          {
+            text: 'ما المقصود بالبرنامج الحاسوبي في وحدة البرمجة في سكراتش؟',
+            options: [
+              'مجموعة من التعليمات المكتوبة بلغة برمجية يمكن تشغيلها بواسطة الحاسب لتحقيق هدف محدد',
+              'سلك توصيل الكهرباء بشاشة الحاسوب',
+              'مجلد لحفظ الصور الفوتوغرافية فقط',
+              'زر إيقاف تشغيل لوحة المفاتيح'
+            ],
+            correctIndex: 0,
+            hint: 'البرنامج هو مجموعة التعليمات البرمجية التي ينفذها الحاسب لتحقيق هدف معين.'
+          },
+          {
+            text: 'ما الترتيب الصحيح لخطوات إنشاء برنامج منذ البداية وحتى كتابة المقطع البرمجي؟',
+            options: [
+              'كتابة المقطع البرمجي ⟵ تحليل المشكلة ⟵ رسم المخطط الانسيابي',
+              'تحليل المشكلة ⟵ إنشاء الخوارزمية ⟵ رسم المخطط الانسيابي ⟵ كتابة المقطع البرمجي',
+              'رسم المخطط الانسيابي ⟵ تحليل المشكلة ⟵ إنشاء الخوارزمية',
+              'اختبار الكائن ⟵ حذف الخوارزمية ⟵ تحليل المشكلة'
+            ],
+            correctIndex: 1,
+            hint: 'نبدأ بتحليل المشكلة، ثم صياغة الخوارزمية، ثم رسم المخطط الانسيابي، وأخيراً كتابة المقطع البرمجي.'
+          },
+          {
+            text: 'ماذا يحدث إذا أعطينا الحاسب تعليمات برمجية غير صحيحة أو متناقضة؟',
+            options: [
+              'يصحح الحاسب الأخطاء تلقائياً من نفسه دائماً',
+              'لا يستطيع الحاسب تصحيحها من تلقاء نفسه وقد يعطي نتيجة خاطئة أو لا يعمل كما نريد',
+              'يتحول البرنامج إلى لعبة موسيقية',
+              'يحذف نظام التشغيل بالكامل'
+            ],
+            correctIndex: 1,
+            hint: 'الحاسب ينفذ التعليمات التي نكتبها بدقة ولا يصحح منطق الخطأ من تلقاء نفسه.'
+          },
+          {
+            text: 'عند إنشاء خوارزمية لإعداد عرض تقديمي في الصف، أي خطوة تأتي ضمن التخطيط الجيد؟',
+            options: [
+              'تحديد موضوع العرض وأهدافه وإنشاء المقدمة والنص والخاتمة',
+              'تجاهل الجمهور والهدف من العرض',
+              'حذف شرائح العرض قبل البدء',
+              'البدء بالخاتمة قبل معرفة الموضوع'
+            ],
+            correctIndex: 0,
+            hint: 'تتضمن خوارزمية العرض التقديمي تحديد الموضوع والأهداف ثم إعداد المقدمة والنص والخاتمة والتدريب.'
+          },
+          {
+            text: 'عند كتابة خوارزمية رسم كائن في وسط المنصة وإصدار صوت، ما الخطوة المنطقية الأولى؟',
+            options: [
+              'البداية وتهيئة المنصة (مثل مسح الرسومات السابقة)',
+              'إغلاق نافذة سكراتش',
+              'حذف جميع الأصوات من المشروع',
+              'وضع الكائن خارج حدود المنصة'
+            ],
+            correctIndex: 0,
+            hint: 'تبدأ أي خوارزمية بكلمة (البداية) وتجهيز بيئة العمل قبل تنفيذ الأوامر.'
+          },
+          {
+            text: 'لماذا نستخدم المخطط الانسيابي قبل البدء بتركيب لبنات سكراتش؟',
+            options: [
+              'لتوضيح تسلسل الخطوات والقرارات بصرياً وتسهيل اكتشاف الأخطاء مبكراً',
+              'لزيادة حجم ملف البرنامج فقط',
+              'لتغيير لون فأرة الحاسوب',
+              'للاستغناء عن فكرة البرنامج'
+            ],
+            correctIndex: 0,
+            hint: 'المخطط الانسيابي يجعل مسار الحل واضحاً ومنظماً قبل كتابة المقطع البرمجي.'
+          },
+          {
+            text: 'أي عبارة مما يلي تصف الخوارزمية بدقة؟',
+            options: [
+              'كتابة الخطوات الإجرائية اللازمة لحل مشكلة بكلمات بسيطة وواضحة',
+              'رسم خلفية زرقاء فقط',
+              'ضغط زر الفأرة الأيمن عشوائياً',
+              'تسمية الكائن برقم عشوائي'
+            ],
+            correctIndex: 0,
+            hint: 'الخوارزمية هي وصف واضح ومرتب لخطوات حل المشكلة بلغة بسيطة.'
+          }
+        ]
+      },
+      {
+        id: 1,
+        stallName: 'مخبز المدينة',
+        topic: 'الكائنات في سكراتش والتفاعل معها',
+        awningClass: 'awning-bakery',
+        goods: '🥐🥖🧁🍩',
+        questions: [
+          {
+            text: 'في برنامج سكراتش، كيف يمكننا جعل الكائن يبدو وكأنه يمشي أو يتحرك بشكل طبيعي؟',
+            visualHtml: `<span class="s-block s-looks">المظهر التالي</span>`,
+            options: [
+              'حذف الكائن من المنصة',
+              'التبديل بين مظاهر الكائن المختلفة',
+              'تغيير اسم المشروع فقط',
+              'إخفاء شريط اللبنات'
+            ],
+            correctIndex: 1,
+            hint: 'لبنات المظهر البنفسجية مثل (المظهر التالي) تغيّر شكل الكائن لإعطاء إحساس بالحركة.'
+          },
+          {
+            text: 'لتحديد موقع الكائن بدقة على منصة سكراتش، نستخدم الإحداثيين:',
+            options: [
+              'س (X) للوضع الأفقي، وص (Y) للوضع الرأسي',
+              'الحجم والاتجاه فقط',
+              'اللون والسطوع فقط',
+              'الصوت ومستوى الإضاءة'
+            ],
+            correctIndex: 0,
+            hint: 'تُقسّم المنصة إلى محور أفقي (X) ومحور رأسي (Y) لتحديد موضع كل كائن.'
+          },
+          {
+            text: 'لإظهار فقاعة كلام فوق الكائن يرحب فيها بالزوار، أي فئة لبنات نستخدم؟',
+            visualHtml: `<span class="s-block s-looks">قل <span class="s-slot">أهلاً بكم في المخبز!</span> لمدة <span class="s-slot">2</span> ثانية</span>`,
+            options: [
+              'لبنات الصوت (الوردية)',
+              'لبنات المظهر / الهيئة (البنفسجية)',
+              'لبنات المتغيرات (البرتقالية الداكنة)',
+              'لبنات القلم (الخضراء الداكنة)'
+            ],
+            correctIndex: 1,
+            hint: 'لبنة (قل ... لمدة ... ثانية) تنتمي إلى لبنات المظهر / الهيئة ذات اللون البنفسجي.'
+          },
+          {
+            text: 'ما المقصود بـ «الكائن» في برنامج سكراتش؟',
+            options: [
+              'شخصية أو رسمة أو نص أو صورة تظهر على المنصة ويمكن برمجتها',
+              'مجلد لحفظ الملفات في نظام ويندوز فقط',
+              'سماعة خارجية متصلة بالحاسوب',
+              'اسم لغة البرمجة فقط'
+            ],
+            correctIndex: 0,
+            hint: 'الكائن في سكراتش هو العنصر التفاعلي على المنصة الذي نركب له المقاطع البرمجية.'
+          },
+          {
+            text: 'كيف يمكننا إضافة كائن جديد إلى مشروعنا في سكراتش؟',
+            options: [
+              'باختيار كائن من مكتبة الكائنات أو رسمه أو رفعه من الجهاز',
+              'لا يمكن إضافة كائنات جديدة أبداً',
+              'بإغلاق البرنامج وإعادة فتحه',
+              'بالضغط على زر الطاقة في الشاشة'
+            ],
+            correctIndex: 0,
+            hint: 'يوفر سكراتش أزراراً لإضافة كائن من المكتبة أو رسم كائن جديد أو اختيار صورة.'
+          },
+          {
+            text: 'كيف نحذف كائناً غير مرغوب فيه في واجهة سكراتش؟',
+            options: [
+              'بالضغط على أيقونة سلة الحذف الخاصة بالكائن أو النقر بزر الفأرة الأيمن واختيار حذف',
+              'بتغيير لون خلفية المتصفح',
+              'بإعادة تشغيل الحاسوب',
+              'بتكبير حجم الخط في العنوان'
+            ],
+            correctIndex: 0,
+            hint: 'يمكن حذف الكائن بسهولة عبر أيقونة الحذف على بطاقته في قائمة الكائنات.'
+          },
+          {
+            text: 'ما وظيفة لبنة (اسأل ... وانتظر) الزرقاء عند إجراء محادثة مع الكائن؟',
+            visualHtml: `<span class="s-block s-sensing">اسأل <span class="s-slot">ما اسمك؟</span> وانتظر</span>`,
+            options: [
+              'تظهر سؤالاً وتنتظر كتابة المستخدم لإجابته ثم تخزنها في لبنة (الإجابة)',
+              'تحذف الكائن من المنصة فوراً',
+              'تشغل صوت الموسيقى الخلفية فقط',
+              'تغير اتجاه الكائن إلى 90 درجة'
+            ],
+            correctIndex: 0,
+            hint: 'لبنة (اسأل ... وانتظر) تعرض مربع إدخال للمستخدم وتنتظر إدخال القيمة.'
+          },
+          {
+            text: 'أين تُحفظ القيمة التي يكتبها المستخدم رداً على لبنة (اسأل ... وانتظر)؟',
+            visualHtml: `<span class="s-block s-sensing" style="border-radius:16px;">الإجابة</span>`,
+            options: [
+              'في لبنة (الإجابة) من فئة الاستشعار',
+              'في شريط العنوان العلوي',
+              'في سلة المهملات',
+              'في لوحة المفاتيح'
+            ],
+            correctIndex: 0,
+            hint: 'لبنة (الإجابة) تحتفظ دائماً بآخر نص أو رقم أدخله المستخدم رداً على السؤال.'
+          },
+          {
+            text: 'ما وظيفة لبنة (اربط () ()) الخضراء من فئة المعاملات (Operators)؟',
+            visualHtml: `<span class="s-block s-operators">اربط <span class="s-slot">مرحباً يا </span> <span class="s-slot">الإجابة</span></span>`,
+            options: [
+              'دمج نصين أو قيمتين معاً في سلسلة نصية واحدة مثل جملة ترحيبية',
+              'طرح رقمين من بعضهما',
+              'إيقاف الكائن عن الحركة',
+              'تكبير المنصة بالكامل'
+            ],
+            correctIndex: 0,
+            hint: 'تُستخدم لبنة (اربط) لجمع النصوص والقيم معاً مثل ربط كلمة ترحيب مع لبنة (الإجابة).'
+          },
+          {
+            text: 'أي لبنة نضعها في بداية المقطع البرمجي لبدء المحادثة عند تشغيل البرنامج؟',
+            visualHtml: `<span class="s-block s-events">عند نقر 🚩</span>`,
+            options: [
+              'عند نقر العلم الأخضر من فئة الأحداث',
+              'المظهر التالي من فئة الهيئة',
+              'اسأل () وانتظر من فئة الاستشعار',
+              'ارتد إذا كنت عند الحافة من فئة الحركة'
+            ],
+            correctIndex: 0,
+            hint: 'لبنة (عند نقر العلم الأخضر) تُشغّل المقطع البرمجي عند بدء تشغيل المشروع.'
+          }
+        ]
+      },
+      {
+        id: 2,
+        stallName: 'متجر العطارة',
+        topic: 'المعاملات الشرطية والجمل الشرطية',
+        awningClass: 'awning-spices',
+        goods: '🌿🍯🫖🧂',
+        questions: [
+          {
+            text: 'ما ناتج المعامل الشرطي الأخضر الموضح في الصورة التالية؟',
+            visualHtml: `<span class="s-block s-operators"><span class="s-slot">15</span> &gt; <span class="s-slot">9</span></span>`,
+            options: [
+              'صحيح (True) لأن 15 أكبر من 9',
+              'خطأ (False) لأن 15 أصغر من 9',
+              'لا يعطي أي نتيجة',
+              'يحذف الكائن من المنصة'
+            ],
+            correctIndex: 0,
+            hint: 'المعامل (>) يتحقق هل القيمة الأولى أكبر من الثانية، وبما أن 15 أكبر من 9 فالنتيجة صحيح.'
+          },
+          {
+            text: 'عندما يكون الشرط داخل لبنة (إذا ... وإلا) غير متحقق (خطأ)، ماذا يفعل البرنامج؟',
+            visualHtml: `<span class="s-block s-control">إذا &lt; الشرط &gt; ثم ... وإلا ...</span>`,
+            options: [
+              'ينفذ الأوامر الموجودة تحت كلمة (إلا)',
+              'ينفذ الأوامر الموجودة تحت كلمة (إذا)',
+              'يغلق جهاز الحاسوب',
+              'يمسح جميع الكائنات'
+            ],
+            correctIndex: 0,
+            hint: 'في لبنة (إذا ... وإلا)، إذا تحقق الشرط يُنفّذ الجزء الأول، وإذا لم يتحقق يُنفّذ جزء (إلا).'
+          },
+          {
+            text: 'لماذا نستخدم المعاملات الشرطية في سكراتش؟',
+            options: [
+              'لمقارنة القيم والتحقق من الشروط ثم اتخاذ القرار المناسب بناءً على النتيجة',
+              'لتغيير لون شاشة الحاسوب فقط',
+              'لحفظ الملفات بصيغة صوتية',
+              'لإخفاء زر العلم الأخضر'
+            ],
+            correctIndex: 0,
+            hint: 'المعاملات الشرطية تقارن بين قيمتين وتحدد ما إذا كان الشرط صحيحاً أم خاطئاً لاتخاذ قرار.'
+          },
+          {
+            text: 'ما ناتج المقارنة الشرطية التالية: (8 < 12)؟',
+            visualHtml: `<span class="s-block s-operators"><span class="s-slot">8</span> &lt; <span class="s-slot">12</span></span>`,
+            options: [
+              'صحيح (True) لأن العدد 8 أصغر من 12',
+              'خطأ (False) لأن العدد 8 أكبر من 12',
+              'يساوي 20',
+              'رسالة خطأ برمجي'
+            ],
+            correctIndex: 0,
+            hint: 'الرمز (<) يعني أصغر من، وبالفعل 8 أصغر من 12 فالنتيجة صحيحة.'
+          },
+          {
+            text: 'ما ناتج المقارنة الشرطية التالية: (7 = 10)؟',
+            visualHtml: `<span class="s-block s-operators"><span class="s-slot">7</span> = <span class="s-slot">10</span></span>`,
+            options: [
+              'صحيح (True)',
+              'خطأ (False) لأن 7 لا تساوي 10',
+              'تساوي 17',
+              'تساوي 3'
+            ],
+            correctIndex: 1,
+            hint: 'المعامل (=) يتحقق من تساوي القيمتين، و7 لا تساوي 10 لذلك النتيجة خطأ (False).'
+          },
+          {
+            text: 'أي معامل شرطي نستخدم للتحقق من أن قيمة (الدرجة) أكبر من (50)؟',
+            options: [
+              'الدرجة > 50',
+              'الدرجة < 50',
+              'الدرجة = 50',
+              'الدرجة + 50'
+            ],
+            correctIndex: 0,
+            hint: 'نستخدم علامة أكبر من (>) للتحقق من أن القيمة الأولى تتجاوز 50.'
+          },
+          {
+            text: 'أي معامل شرطي نستخدم للتحقق من أن (عدد التفاح) أقل من (3)؟',
+            options: [
+              'عدد التفاح > 3',
+              'عدد التفاح < 3',
+              'عدد التفاح = 3',
+              'ارتد إذا كنت عند الحافة'
+            ],
+            correctIndex: 1,
+            hint: 'نستخدم علامة أصغر من (<) للتحقق مما إذا كان العدد أقل من 3.'
+          },
+          {
+            text: 'في الجملة الشرطية: إذا (الإجابة = 20) ثم قل (أحسنت!) وإلا قل (حاول مرة أخرى)، ماذا يحدث لو كتب المستخدم (20)؟',
+            options: [
+              'يقول الكائن: أحسنت!',
+              'يقول الكائن: حاول مرة أخرى',
+              'يتوقف البرنامج دون رد',
+              'يختفي الكائن من الشاشة'
+            ],
+            correctIndex: 0,
+            hint: 'تحقق الشرط (20 = 20) يجعل البرنامج ينفذ الأوامر الموجودة بعد (ثم).'
+          },
+          {
+            text: 'في الجملة الشرطية السابقة، ماذا يحدث لو كتب المستخدم (15) بدلاً من (20)؟',
+            options: [
+              'يقول الكائن: حاول مرة أخرى',
+              'يقول الكائن: أحسنت!',
+              'يزيد حجم الكائن 50 مرة',
+              'يفتح نافذة جديدة'
+            ],
+            correctIndex: 0,
+            hint: 'لأن 15 لا تساوي 20، فالشرط غير متحقق وينفذ البرنامج فرع (وإلا).'
+          },
+          {
+            text: 'من أي فئة برمجية تأتي لبنات المقارنة (< ، = ، >) في سكراتش؟',
+            options: [
+              'فئة المعاملات / العمليات (Operators) الخضراء',
+              'فئة الصوت الوردية',
+              'فئة المظاهر البنفسجية',
+              'فئة الحركة الزرقاء'
+            ],
+            correctIndex: 0,
+            hint: 'لبنات المقارنة والعمليات الحسابية والمنطقية تقع في فئة المعاملات (Operators).'
+          }
+        ]
+      },
+      {
+        id: 3,
+        stallName: 'سوق الحركة والرسائل',
+        topic: 'الحركة • رسائل البث • الاستشعار • مشروع القطة والفأر',
+        awningClass: 'awning-plaza',
+        goods: '🐱🐭📡🎯',
+        questions: [
+          {
+            text: 'ما وظيفة لبنة (ارتد إذا كنت عند الحافة) في حركة الكائنات على المنصة؟',
+            visualHtml: `<span class="s-block s-looks" style="background:#4c97ff;">ارتد إذا كنت عند الحافة</span>`,
+            options: [
+              'تجعل الكائن يستدير ويعود للداخل عندما يلامس حافة المنصة',
+              'تحذف الكائن عند وصوله لحافة المنصة',
+              'تجعل الكائن لا يتحرك أبداً',
+              'تغير لون خلفية السوق'
+            ],
+            correctIndex: 0,
+            hint: 'تمنع هذه اللبنة خروج الكائن من حدود المنصة بجعله يرتد عند ملامسة الحافة.'
+          },
+          {
+            text: 'ما نمط الدوران (Rotation Style) الذي يجعل الكائن يتجه نحو اليمين أو اليسار فقط دون انقلابه رأساً على عقب؟',
+            options: [
+              'يمين – يسار (left-right)',
+              'في جميع الاتجاهات (all-around)',
+              'لا دوران (don’t rotate)',
+              'دوران دائري مستمر'
+            ],
+            correctIndex: 0,
+            hint: 'نمط (يمين – يسار) يوجه الكائن لليمين أو اليسار فقط ليبقى مظهره معتدلاً.'
+          },
+          {
+            text: 'ما نمط الدوران الذي يجعل الكائن يحافظ على اتجاهه الثابت دون أن يلتف أو ينقلب أثناء الحركة؟',
+            options: [
+              'لا دوران (don’t rotate)',
+              'في جميع الاتجاهات (all-around)',
+              'يمين – يسار (left-right)',
+              'انعكاس أفقي'
+            ],
+            correctIndex: 0,
+            hint: 'نمط (لا دوران) يمنع دوران الكائن ويجعله يحافظ على هيئته الثابتة أثناء الحركة.'
+          },
+          {
+            text: 'في خوارزمية تحريك الكائن للأعلى، ما قيمة الاتجاه التي نجعل الكائن يتجه إليها؟',
+            options: [
+              'الاتجاه 0 (للأعلى)',
+              'الاتجاه 180 (للأسفل)',
+              'الاتجاه 90 (لليمين)',
+              'الاتجاه -90 (لليسار)'
+            ],
+            correctIndex: 0,
+            hint: 'في سكراتش يشير الاتجاه (0) إلى الأعلى، بينما يشير الاتجاه (180) إلى الأسفل.'
+          },
+          {
+            text: 'في خوارزمية تحريك الكائن للأسفل، ما قيمة الاتجاه التي نجعل الكائن يتجه إليها؟',
+            options: [
+              'الاتجاه 180 (للأسفل)',
+              'الاتجاه 0 (للأعلى)',
+              'الاتجاه 45',
+              'الاتجاه 360'
+            ],
+            correctIndex: 0,
+            hint: 'الاتجاه (180) في سكراتش يوجه الكائن نحو الأسفل.'
+          },
+          {
+            text: 'ما الفرق الأساسي بين لبنة (بث رسالة) ولبنة (بث رسالة وانتظر)؟',
+            visualHtml: `
+              <span class="s-block s-events">بث <span class="s-slot">رسالة1</span></span>
+              <span class="s-block s-events">بث <span class="s-slot">رسالة1</span> وانتظر</span>
+            `,
+            options: [
+              '(بث وانتظر) تنتظر حتى تنتهي المقاطع المستقبلة للرسالة قبل المتابعة، بينما (بث) تتابع فوراً',
+              'لا يوجد أي فرق بينهما نهائياً',
+              '(بث) تحذف جميع الكائنات',
+              '(بث وانتظر) تغلق البرنامج'
+            ],
+            correctIndex: 0,
+            hint: 'لبنة (بث ... وانتظر) توقف المقطع الحالي مؤقتاً حتى تنهي المقاطع المستقبلة عملها.'
+          },
+          {
+            text: 'أي لبنة تُستخدم لاستقبال رسالة البث وتشغيل المقطع البرمجي المرتبط بها؟',
+            visualHtml: `<span class="s-block s-events">عندما أتلقى <span class="s-slot">بداية اللعب</span></span>`,
+            options: [
+              'عندما أتلقى (رسالة)',
+              'اسأل () وانتظر',
+              'المظهر التالي',
+              'حجم الكائن'
+            ],
+            correctIndex: 0,
+            hint: 'لبنة (عندما أتلقى رسالة) هي نقطة البداية للمقاطع التي تستجيب للرسالة المرسلة.'
+          },
+          {
+            text: 'ما وظيفة لبنة الاستشعار (ملامس لـ ()؟) في مشروع مثل «القطة والفأر»؟',
+            visualHtml: `<span class="s-block s-sensing">ملامس لـ <span class="s-slot">الفأر</span>؟</span>`,
+            options: [
+              'للتحقق مما إذا كان الكائن يلامس كائناً آخر أو حافة الشاشة أو مؤشر الفأرة',
+              'لتغيير اسم المشروع',
+              'لإضافة صوت موسيقي تلقائي',
+              'لإغلاق المنصة'
+            ],
+            correctIndex: 0,
+            hint: 'لبنة (ملامس لـ ...؟) تتحقق من تلامس الكائن مع كائن محدد أو مؤشر الفأرة أو الحافة.'
+          },
+          {
+            text: 'ما الفرق بين لبنة (ملامس للون ()؟) ولبنة (اللون () ملامس للون ()؟)؟',
+            visualHtml: `
+              <span class="s-block s-sensing">ملامس للون؟</span>
+              <span class="s-block s-sensing">اللون ملامس للون؟</span>
+            `,
+            options: [
+              '(ملامس للون) تتحقق من ملامسة الكائن للون محدد، و(اللون ملامس للون) تتحقق من تلامس لونين محددين',
+              'كلاهما يغيران حجم الكائن فقط',
+              'لا توجد لبنات للتحقق من الألوان في سكراتش',
+              'تستخدمان لطباعة المستندات'
+            ],
+            correctIndex: 0,
+            hint: 'الأولى تتحقق من تلامس الكائن مع لون، والثانية تتحقق من تلامس لون مع لون آخر.'
+          },
+          {
+            text: 'في مشروع «القطة والفأر» بالوحدة الرابعة، كيف نجعل الكائن يتحرك باستمرار داخل المنصة ويرتد عند الحواف؟',
+            options: [
+              'وضع (تحرك 10 خطوة) و(ارتد إذا كنت عند الحافة) داخل لبنة (كرر باستمرار) بعد (عند نقر العلم الأخضر)',
+              'وضع (تحرك 10 خطوة) مرة واحدة دون تكرار ولا ارتداد',
+              'حذف لبنة العلم الأخضر',
+              'إخفاء الكائن في بداية اللعبة'
+            ],
+            correctIndex: 0,
+            hint: 'الجمع بين (كرر باستمرار) و(تحرك) و(ارتد إذا كنت عند الحافة) يحقق حركة مستمرة ومتزنة داخل المسرح.'
+          }
+        ]
+      }
+    ];
+
+    /* =====================================================================
+       3. حالة اللعبة والمتغيرات
+       ===================================================================== */
+    let studentName = '';
+    let currentStageIdx = 0;
+    let currentQuestionIdx = 0;
+    let score = 0;
+    let answeredCurrent = false;
+    let freeExploreMode = true; // جميع الأكشاك قابلة للفتح والنقر مباشرة لسهولة التنقل
+    let completedStages = [false, false, false, false];
+    let stageProgress = [0, 0, 0, 0]; // يتتبع رقم السؤال الحالي في كل مرحلة
+    let answeredMap = {}; // يمنع تكرار احتساب النقاط لنفس السؤال
+    let currentShuffledQuestion = null; // يحفظ السؤال بعد خلط خياراته عشوائياً
+    const totalQuestions = STAGES_DATA.reduce((sum, st) => sum + st.questions.length, 0);
+
+    /* دالة خلط الاختيارات عشوائياً (Fisher-Yates Shuffle) مع تتبع فهرس الإجابة الصحيحة */
+    function getShuffledQuestion(rawQuestion) {
+      const indexedOptions = rawQuestion.options.map((text, idx) => ({
+        text,
+        isCorrect: idx === rawQuestion.correctIndex
+      }));
+
+      for (let i = indexedOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indexedOptions[i], indexedOptions[j]] = [indexedOptions[j], indexedOptions[i]];
+      }
+
+      return {
+        text: rawQuestion.text,
+        visualHtml: rawQuestion.visualHtml,
+        hint: rawQuestion.hint,
+        options: indexedOptions.map(item => item.text),
+        correctIndex: indexedOptions.findIndex(item => item.isCorrect)
+      };
+    }
+
+    /* =====================================================================
+       4. بدء اللعبة وإدارة الواجهات
+       ===================================================================== */
+    function startGame() {
+      const input = document.getElementById('studentNameInput');
+      const err = document.getElementById('nameErrorMsg');
+      const val = input.value.trim();
+
+      if (!val) {
+        err.style.display = 'block';
+        input.focus();
+        playSound('wrong');
+        return;
+      }
+
+      err.style.display = 'none';
+      studentName = val;
+      document.getElementById('hudStudentName').textContent = studentName;
+      initAudio();
+      playSound('stageClear');
+      closeModal('startModal');
+
+      currentStageIdx = 0;
+      currentQuestionIdx = 0;
+      score = 0;
+      answeredCurrent = false;
+      completedStages = [false, false, false, false];
+      stageProgress = [0, 0, 0, 0];
+      answeredMap = {};
+
+      updateUnlockButtonUI();
+      setMascotState('normal', `أهلاً بكِ يا ${studentName}! اضغطي على أي كشك أو ابدئي من كشك الفواكه.`);
+      renderStalls();
+      renderQuestion();
+      updateHUD();
+    }
+
+    function toggleFreeExplore() {
+      freeExploreMode = !freeExploreMode;
+      playSound('click');
+      updateUnlockButtonUI();
+      renderStalls();
+      const msg = freeExploreMode
+        ? 'تم تفعيل وضع الاستكشاف الحر: يمكنكِ الضغط على أي كشك في السوق للانتقال إليه فوراً!'
+        : 'تم تفعيل وضع التدرج المتسلسل: أتمّي كل محطة لفتح التالية.';
+      setMascotState('happy', msg);
+    }
+
+    function updateUnlockButtonUI() {
+      const btn = document.getElementById('unlockAllBtn');
+      if (!btn) return;
+      if (freeExploreMode) {
+        btn.classList.add('active-mode');
+        btn.textContent = '🔓 كل الأكشاك مفتوحة';
+      } else {
+        btn.classList.remove('active-mode');
+        btn.textContent = '🔒 فتح كل الأكشاك';
+      }
+    }
+
+    function jumpToStage(targetIdx) {
+      if (targetIdx < 0 || targetIdx >= STAGES_DATA.length) return;
+      const isUnlocked = freeExploreMode || targetIdx <= currentStageIdx || completedStages[targetIdx] || (targetIdx > 0 && completedStages[targetIdx - 1]);
+
+      if (!isUnlocked) {
+        playSound('wrong');
+        setMascotState('worried', `أكملي أسئلة "${STAGES_DATA[targetIdx - 1].stallName}" أولاً، أو اضغطي زر (فتح كل الأكشاك) بالأعلى!`);
+        return;
+      }
+
+      playSound('click');
+      currentStageIdx = targetIdx;
+      // إذا كانت المرحلة مكتملة سابقاً، نبدأ من أول سؤال فيها للمراجعة، وإلا نكمل من حيث توقف الطالب
+      currentQuestionIdx = completedStages[targetIdx] ? 0 : (stageProgress[targetIdx] || 0);
+      answeredCurrent = false;
+
+      const targetStage = STAGES_DATA[targetIdx];
+      setMascotState('normal', `مرحباً بكِ في ${targetStage.stallName}! موضوعنا: ${targetStage.topic}.`);
+      renderStalls();
+      renderQuestion();
+      updateHUD();
+    }
+
+    function openModal(id) {
+      playSound('click');
+      document.getElementById(id).classList.add('open');
+      if (id === 'scaleModal') updateScaleLab();
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    /* =====================================================================
+       5. تحديث مشهد الأكشاك في السوق والسهم الأصفر المتحرك وأزرار التنقل
+       ===================================================================== */
+    function renderStalls() {
+      const container = document.getElementById('stallsContainer');
+      const tabsContainer = document.getElementById('quickStageTabs');
+      container.innerHTML = '';
+      if (tabsContainer) tabsContainer.innerHTML = '';
+
+      STAGES_DATA.forEach((stage, idx) => {
+        const isActive = idx === currentStageIdx;
+        const isCompleted = completedStages[idx];
+        const isUnlocked = freeExploreMode || isActive || isCompleted || (idx > 0 && completedStages[idx - 1]);
+        const isLocked = !isUnlocked;
+
+        // 1. بناء الكشك في مشهد السوق
+        const card = document.createElement('div');
+        card.className = `stall-card ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''} ${isLocked ? 'locked' : ''}`;
+        card.title = `اضغطي للانتقال إلى ${stage.stallName}: ${stage.topic}`;
+        card.onclick = () => jumpToStage(idx);
+
+        let arrowSvg = '';
+        if (isActive) {
+          arrowSvg = `
+            <svg class="active-arrow" viewBox="0 0 16 16" shape-rendering="crispEdges">
+              <polygon points="6,1 10,1 10,8 14,8 8,15 2,8 6,8" fill="#ffd23f" stroke="#1d1b26" stroke-width="1.3"/>
+            </svg>
+          `;
+        }
+
+        const statusText = isCompleted ? '✅ مكتمل (اضغطي)' : (isActive ? '📍 المحطة الحالية' : (isUnlocked ? '🔓 مفتوح (اضغطي)' : '🔒 مغلق'));
+
+        card.innerHTML = `
+          ${arrowSvg}
+          <div class="stall-awning ${stage.awningClass}"></div>
+          <div class="stall-body">
+            <div class="stall-goods">${stage.goods}</div>
+            <div class="stall-title">${stage.stallName}</div>
+            <div class="stall-status-badge">${statusText}</div>
+          </div>
+        `;
+        container.appendChild(card);
+
+        // 2. بناء زر التبويب السريع أعلى السوق
+        if (tabsContainer) {
+          const tabBtn = document.createElement('button');
+          tabBtn.className = `stage-tab-btn ${isActive ? 'active-tab' : ''} ${isCompleted ? 'completed-tab' : ''}`;
+          const icon = isCompleted ? '✅' : (isActive ? '👉' : (isUnlocked ? '🔓' : '🔒'));
+          tabBtn.innerHTML = `<span>${icon}</span><span>${idx + 1}. ${stage.stallName}</span>`;
+          tabBtn.onclick = () => jumpToStage(idx);
+          tabsContainer.appendChild(tabBtn);
+        }
+      });
+    }
+
+    /* =====================================================================
+       6. تحديث تعابير الشخصية الرئيسية (شاشة الحاسوب البكسل)
+       ===================================================================== */
+    function setMascotState(mood, message) {
+      const wrapper = document.getElementById('mascotWrapper');
+      const screenBg = document.getElementById('screenBg');
+      const fNormal = document.getElementById('faceNormal');
+      const fHappy = document.getElementById('faceHappy');
+      const fWorried = document.getElementById('faceWorried');
+      const stars = document.getElementById('celebrateStars');
+      const label = document.getElementById('mascotMoodLabel');
+      const speech = document.getElementById('mascotSpeech');
+
+      wrapper.classList.remove('celebrate', 'worried');
+      fNormal.style.display = 'none';
+      fHappy.style.display = 'none';
+      fWorried.style.display = 'none';
+      stars.style.display = 'none';
+
+      if (mood === 'happy') {
+        screenBg.setAttribute('fill', '#4cd97b');
+        fHappy.style.display = 'block';
+        label.textContent = 'رائع! إجابة صحيحة';
+        label.style.background = '#38b764';
+      } else if (mood === 'celebrate') {
+        screenBg.setAttribute('fill', '#ffd23f');
+        fHappy.style.display = 'block';
+        stars.style.display = 'block';
+        wrapper.classList.add('celebrate');
+        label.textContent = '🌟 احتفال الإنجاز!';
+        label.style.background = '#ff9f1c';
+      } else if (mood === 'worried') {
+        screenBg.setAttribute('fill', '#ff7b82');
+        fWorried.style.display = 'block';
+        wrapper.classList.add('worried');
+        label.textContent = 'انتبهي للبنات!';
+        label.style.background = '#e43b44';
+      } else {
+        screenBg.setAttribute('fill', '#29adff');
+        fNormal.style.display = 'block';
+        label.textContent = 'المساعد الرقمي';
+        label.style.background = '#29adff';
+      }
+
+      if (message) {
+        speech.textContent = message;
+      }
+    }
+
+    /* =====================================================================
+       7. عرض السؤال والتحقق من الإجابة
+       ===================================================================== */
+    function renderQuestion() {
+      answeredCurrent = false;
+      const stage = STAGES_DATA[currentStageIdx];
+      const q = getShuffledQuestion(stage.questions[currentQuestionIdx]);
+      currentShuffledQuestion = q;
+
+      document.getElementById('stageTopicBadge').textContent = `🏪 ${stage.stallName}: ${stage.topic}`;
+      document.getElementById('questionCounter').textContent = `السؤال ${currentQuestionIdx + 1} من ${stage.questions.length}`;
+      document.getElementById('questionText').textContent = q.text;
+
+      const visualBox = document.getElementById('visualBlockContainer');
+      if (q.visualHtml) {
+        visualBox.style.display = 'flex';
+        visualBox.className = 'scratch-visual-box';
+        visualBox.innerHTML = q.visualHtml;
+      } else {
+        visualBox.style.display = 'none';
+        visualBox.innerHTML = '';
+      }
+
+      const fb = document.getElementById('feedbackBanner');
+      fb.className = 'feedback-banner';
+      document.getElementById('stageCompleteBanner').classList.remove('show');
+      document.getElementById('nextQuestionBtn').style.display = 'none';
+
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+      const letters = ['أ', 'ب', 'ج', 'د'];
+
+      q.options.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'pixel-btn option-btn';
+        btn.innerHTML = `<span class="opt-letter">${letters[idx]}</span><span>${optText}</span>`;
+        btn.onclick = () => selectOption(idx, btn);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function selectOption(selectedIdx, btnElement) {
+      if (answeredCurrent) return;
+      answeredCurrent = true;
+
+      const stage = STAGES_DATA[currentStageIdx];
+      const q = currentShuffledQuestion || stage.questions[currentQuestionIdx];
+      const allBtns = document.querySelectorAll('#optionsContainer .option-btn');
+      const qKey = `${currentStageIdx}-${currentQuestionIdx}`;
+
+      allBtns.forEach(b => (b.disabled = true));
+
+      const fb = document.getElementById('feedbackBanner');
+      const fbTitle = document.getElementById('feedbackTitle');
+      const fbDetail = document.getElementById('feedbackDetail');
+      const nextBtn = document.getElementById('nextQuestionBtn');
+      const stageBanner = document.getElementById('stageCompleteBanner');
+
+      if (selectedIdx === q.correctIndex) {
+        // إجابة صحيحة -> نقطة واحدة (تُحتسب مرة واحدة لكل سؤال)
+        if (!answeredMap[qKey]) {
+          score += 1;
+          answeredMap[qKey] = true;
+        }
+        btnElement.classList.add('correct');
+        playSound('correct');
+
+        fb.className = 'feedback-banner show fb-success';
+        fbTitle.textContent = '✅ أحسنتِ! إجابة صحيحة (+1 نقطة)';
+        fbDetail.textContent = q.hint;
+
+        const isLastQInStage = currentQuestionIdx === stage.questions.length - 1;
+        if (isLastQInStage) {
+          completedStages[currentStageIdx] = true;
+          renderStalls();
+          setMascotState('celebrate', `مذهل يا ${studentName}! أتممتِ ${stage.stallName} بنجاح!`);
+          playSound('stageClear');
+        } else {
+          setMascotState('happy', `عمل رائع يا ${studentName}! استمري بهذا التألق.`);
+        }
+      } else {
+        // إجابة خاطئة
+        if (!answeredMap[qKey]) {
+          answeredMap[qKey] = true;
+        }
+        btnElement.classList.add('wrong');
+        allBtns[q.correctIndex].classList.add('correct');
+        playSound('wrong');
+
+        fb.className = 'feedback-banner show fb-error';
+        fbTitle.innerHTML = '⚠️ راجعي لبنات سكراتش — إجابة غير صحيحة';
+        fbDetail.innerHTML = `💡 تلميح: ${q.hint} <br><button class="pixel-btn btn-tool-rule" style="margin-top:6px;" onclick="openModal('ruleModal')">📘 افتحي بطاقة القاعدة الذكية</button>`;
+
+        if (currentQuestionIdx === stage.questions.length - 1) {
+          completedStages[currentStageIdx] = true;
+          renderStalls();
+        }
+        setMascotState('worried', 'لا بأس! راجعي لبنات سكراتش من البطاقة الذكية في الأعلى.');
+      }
+
+      // تحديث تقدم الأسئلة في هذه المرحلة
+      if (currentQuestionIdx + 1 < stage.questions.length) {
+        stageProgress[currentStageIdx] = currentQuestionIdx + 1;
+      }
+
+      // تحديث زر الانتقال أو بانر إتمام المرحلة
+      const isLastStage = currentStageIdx === STAGES_DATA.length - 1;
+      const isLastQ = currentQuestionIdx === stage.questions.length - 1;
+
+      if (isLastQ) {
+        // إظهار بانر إتمام المحطة البارز مع زر الانتقال المباشر للمحطة التالية
+        stageBanner.classList.add('show');
+        const bigBtn = document.getElementById('nextStageBigBtn');
+        const subText = document.getElementById('stageCompleteSub');
+        const titleText = document.getElementById('stageCompleteTitle');
+
+        if (!isLastStage) {
+          const nextSt = STAGES_DATA[currentStageIdx + 1];
+          titleText.textContent = `🎉 رائع! أتممتِ "${stage.stallName}" بنجاح!`;
+          subText.textContent = `المحطة التالية (${nextSt.stallName}: ${nextSt.topic}) جاهزة الآن!`;
+          bigBtn.textContent = `الانتقال إلى ${nextSt.stallName} 🏪⬅️`;
+        } else {
+          titleText.textContent = `🏆 مذهل! أتممتِ جميع محطات السوق الأربع!`;
+          subText.textContent = `أنتِ جاهزة الآن لاستلام شهادة الإنجاز والتفوق الرقمي.`;
+          bigBtn.textContent = `🏆 عرض الشهادة النهائية`;
+        }
+        nextBtn.style.display = 'none';
+      } else {
+        stageBanner.classList.remove('show');
+        nextBtn.textContent = 'السؤال التالي ⬅️';
+        nextBtn.style.display = 'inline-flex';
+      }
+
+      updateHUD();
+    }
+
+    function handleNextStep() {
+      playSound('click');
+      const stage = STAGES_DATA[currentStageIdx];
+
+      if (currentQuestionIdx < stage.questions.length - 1) {
+        currentQuestionIdx++;
+        setMascotState('normal', 'هيا نقرأ السؤال التالي بتركيز!');
+        renderQuestion();
+      } else if (currentStageIdx < STAGES_DATA.length - 1) {
+        completedStages[currentStageIdx] = true;
+        currentStageIdx++;
+        currentQuestionIdx = 0;
+        const nextStage = STAGES_DATA[currentStageIdx];
+        setMascotState('normal', `وصلنا إلى ${nextStage.stallName}! موضوعنا: ${nextStage.topic}.`);
+        renderStalls();
+        renderQuestion();
+      } else {
+        // نهاية اللعبة وعرض الشهادة
+        completedStages[currentStageIdx] = true;
+        renderStalls();
+        showEndCertificate();
+      }
+      updateHUD();
+    }
+
+    function updateHUD() {
+      document.getElementById('hudStageText').textContent = `${currentStageIdx + 1} / ${STAGES_DATA.length}`;
+      document.getElementById('hudScoreText').textContent = `${score} / ${totalQuestions}`;
+
+      const completedCount = Object.keys(answeredMap).length;
+      const pct = Math.min(100, Math.round((completedCount / totalQuestions) * 100));
+      document.getElementById('hudProgressBar').style.width = `${pct}%`;
+    }
+
+    /* =====================================================================
+       8. مختبر الميزان التفاعلي للمعاملات الشرطية
+       ===================================================================== */
+    let currentScaleOp = '>';
+
+    function setScaleOp(op) {
+      currentScaleOp = op;
+      playSound('click');
+      document.getElementById('opBtnGt').classList.toggle('selected', op === '>');
+      document.getElementById('opBtnEq').classList.toggle('selected', op === '=');
+      document.getElementById('opBtnLt').classList.toggle('selected', op === '<');
+      updateScaleLab();
+    }
+
+    function updateScaleLab() {
+      const a = parseFloat(document.getElementById('scaleValA').value) || 0;
+      const b = parseFloat(document.getElementById('scaleValB').value) || 0;
+
+      document.getElementById('panLeft').textContent = a;
+      document.getElementById('panRight').textContent = b;
+      document.getElementById('liveBlockA').textContent = a;
+      document.getElementById('liveBlockB').textContent = b;
+      document.getElementById('liveBlockOp').textContent = currentScaleOp;
+
+      // إمالة ذراع الميزان بصرياً (في RTL: اليمين هو الكفة الأولى واليسار هو الكفة الثانية)
+      const beam = document.getElementById('scaleBeam');
+      if (a > b) {
+        beam.style.transform = 'rotate(10deg)';
+      } else if (a < b) {
+        beam.style.transform = 'rotate(-10deg)';
+      } else {
+        beam.style.transform = 'rotate(0deg)';
+      }
+
+      let isTrue = false;
+      if (currentScaleOp === '>') isTrue = a > b;
+      if (currentScaleOp === '<') isTrue = a < b;
+      if (currentScaleOp === '=') isTrue = a === b;
+
+      const resBox = document.getElementById('scaleResultBox');
+      if (isTrue) {
+        resBox.style.background = '#d8f8e1';
+        resBox.style.color = '#134724';
+        resBox.innerHTML = `✅ الشرط <strong>(${a} ${currentScaleOp} ${b})</strong> نتيجته: <strong>صحيح (True)</strong><br>سيُنفّذ برنامج سكراتش الأوامر داخل <strong>(إذا)</strong>.`;
+      } else {
+        resBox.style.background = '#ffe0e2';
+        resBox.style.color = '#6e141a';
+        resBox.innerHTML = `❌ الشرط <strong>(${a} ${currentScaleOp} ${b})</strong> نتيجته: <strong>خطأ (False)</strong><br>سيُنفّذ برنامج سكراتش الأوامر داخل <strong>(وإلا)</strong>.`;
+      }
+    }
+
+    /* =====================================================================
+       9. شاشة الختام والشهادة وإعادة اللعب
+       ===================================================================== */
+    function showEndCertificate() {
+      playSound('stageClear');
+      setMascotState('celebrate', `ألف مبروك التخرج يا ${studentName}!`);
+
+      document.getElementById('certStudentName').textContent = studentName;
+      document.getElementById('certScore').textContent = `${score} / ${totalQuestions}`;
+
+      const ratio = score / totalQuestions;
+      let grade = 'ممتاز ومبدع';
+      if (ratio < 0.5) grade = 'جيد — واصل التدريب';
+      else if (ratio < 0.85) grade = 'جيد جداً';
+
+      document.getElementById('certGrade').textContent = grade;
+      document.getElementById('endModal').classList.add('open');
+    }
+
+    function editStudentName() {
+      const box = document.getElementById('editNameBox');
+      const inp = document.getElementById('editNameInput');
+      inp.value = studentName;
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+      inp.focus();
+    }
+
+    function saveEditedName() {
+      const val = document.getElementById('editNameInput').value.trim();
+      if (val) {
+        studentName = val;
+        document.getElementById('certStudentName').textContent = studentName;
+        document.getElementById('editNameBox').style.display = 'none';
+        playSound('correct');
+      }
+    }
+
+    function restartGame() {
+      playSound('click');
+      closeModal('endModal');
+      currentStageIdx = 0;
+      currentQuestionIdx = 0;
+      score = 0;
+      answeredCurrent = false;
+      completedStages = [false, false, false, false];
+      stageProgress = [0, 0, 0, 0];
+      answeredMap = {};
+      setMascotState('normal', `مغامرة جديدة يا ${studentName}! هيا بنا.`);
+      renderStalls();
+      renderQuestion();
+      updateHUD();
+    }
+  </script>
+</body>
+</html>
