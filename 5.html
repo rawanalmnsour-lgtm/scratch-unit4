@@ -1,0 +1,606 @@
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة المهارات الرقمية - الصف الخامس - الابتدائية 77</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #ecfdf5 50%, #f0fdf4 100%);
+            min-h-screen;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.08), 0 10px 15px -5px rgba(0, 0, 0, 0.04);
+        }
+        .correct-anim {
+            animation: pulse-green 0.4s ease-in-out;
+        }
+        .wrong-anim {
+            animation: shake-red 0.4s ease-in-out;
+        }
+        @keyframes pulse-green {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        @keyframes shake-red {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+        .bg-pattern {
+            background-color: #ffffff;
+            background-image: radial-gradient(#0d9488 0.5px, transparent 0.5px), radial-gradient(#0d9488 0.5px, #ffffff 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0,10px 10px;
+            opacity: 0.05;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-3 sm:p-6 relative">
+    <div class="fixed inset-0 bg-pattern pointer-events-none"></div>
+
+    <!-- Main Game Container -->
+    <div class="w-full max-w-2xl glass-card rounded-3xl p-5 sm:p-8 relative overflow-hidden my-4 z-10 border-teal-100">
+        
+        <!-- Header Section -->
+        <div class="flex flex-col items-center mb-6 text-center border-b pb-4 border-gray-100">
+            <div class="flex items-center justify-between w-full mb-3 px-1">
+                <span class="text-xs sm:text-sm font-bold text-teal-800 bg-teal-50 px-3 py-1 rounded-full border border-teal-200">الابتدائية ٧٧ 🏫</span>
+                <span class="text-xs sm:text-sm font-bold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">المهارات الرقمية 💻</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black text-teal-900 mt-1">اختبار الفترة (الفصل الأول)</h1>
+            <p class="text-gray-600 text-xs sm:text-sm mt-1 font-semibold">الصف الخامس الابتدائي • إعداد المعلمة: <span class="text-teal-700 font-bold">روان المنصور</span> ✨</p>
+        </div>
+
+        <!-- SCREEN 1: Welcome & Student Info -->
+        <div id="start-screen" class="space-y-6">
+            <div class="bg-gradient-to-r from-teal-600 to-emerald-600 p-6 rounded-2xl text-white text-center shadow-md relative overflow-hidden">
+                <div class="absolute -right-4 -bottom-4 opacity-20 text-7xl"><i class="fas fa-laptop-code"></i></div>
+                <i class="fas fa-star text-amber-300 text-4xl mb-3 animate-bounce"></i>
+                <h2 class="text-xl sm:text-2xl font-bold mb-2">مرحباً بكِ يا مبدعة المهارات الرقمية! 🚀</h2>
+                <p class="text-sm opacity-95 leading-relaxed">استعدي لإظهار تميزكِ ومهاراتكِ في هذا الاختبار التفاعلي الشيّق!</p>
+            </div>
+
+            <form id="student-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-800 font-bold mb-2 text-right text-sm sm:text-base">اسم الطالبة الرباعي: <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <input type="text" id="student-name" required placeholder="أدخلي اسمكِ الثلاثي أو الرباعي..." class="w-full px-4 py-3.5 pl-10 rounded-xl border-2 border-teal-100 focus:border-teal-500 focus:outline-none transition-colors text-right font-semibold text-gray-800 bg-white shadow-sm">
+                        <i class="fas fa-user absolute left-3 top-4 text-teal-400"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-800 font-bold mb-2 text-right text-sm sm:text-base">الصف: <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <select id="student-class" required class="w-full px-4 py-3.5 pl-10 rounded-xl border-2 border-teal-100 focus:border-teal-500 focus:outline-none transition-colors text-right font-semibold text-gray-800 bg-white shadow-sm cursor-pointer">
+                            <option value="خامس / 1">خامس / 1</option>
+                            <option value="خامس / 2">خامس / 2</option>
+                            <option value="خامس / 3">خامس / 3</option>
+                        </select>
+                        <i class="fas fa-users absolute left-3 top-4 text-teal-400"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-extrabold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-lg flex items-center justify-center gap-3">
+                    <span>الانتقال للأسئلة</span>
+                    <i class="fas fa-play text-amber-300"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- SCREEN 2: Quiz Screen -->
+        <div id="quiz-screen" class="hidden space-y-5">
+            <!-- Progress & Stats Header -->
+            <div class="flex items-center justify-between bg-teal-50/80 p-3.5 rounded-2xl border border-teal-100 text-xs sm:text-sm">
+                <div class="text-right">
+                    <span class="text-gray-500 block text-[11px]">الطالبة</span>
+                    <span id="display-student-name" class="font-bold text-teal-900"></span>
+                </div>
+                <div class="text-center">
+                    <span class="text-gray-500 block text-[11px]">التقدم</span>
+                    <span id="question-number" class="font-bold text-emerald-700">1 / 20</span>
+                </div>
+                <div class="text-left">
+                    <span class="text-gray-500 block text-[11px]">النقاط الحالية</span>
+                    <span id="current-score" class="font-extrabold text-amber-600 text-base">0</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden p-0.5 border border-gray-200">
+                <div id="progress-bar" class="bg-gradient-to-r from-teal-500 to-emerald-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Box -->
+            <div id="question-card" class="bg-white p-5 sm:p-6 rounded-2xl border-2 border-teal-100 shadow-sm transition-all duration-200">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-teal-100 text-teal-900 text-xs font-extrabold px-3 py-1 rounded-full" id="question-type-badge">اختيار من متعدد</span>
+                    <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">الدرجة: <span id="question-marks">1</span></span>
+                </div>
+                
+                <h3 id="question-text" class="text-base sm:text-lg font-extrabold text-gray-800 text-right leading-relaxed mb-5"></h3>
+
+                <!-- Visual Media container (For Picture Matching Questions) -->
+                <div id="visual-container" class="hidden mb-5 text-center bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div id="visual-content" class="flex justify-center items-center"></div>
+                </div>
+
+                <!-- Options -->
+                <div id="options-container" class="space-y-3"></div>
+
+                <!-- Immediate Feedback -->
+                <div id="feedback-message" class="hidden mt-4 p-4 rounded-xl text-center font-bold text-sm transition-all"></div>
+            </div>
+
+            <!-- Next Button -->
+            <button id="next-btn" class="hidden w-full bg-teal-700 hover:bg-teal-800 text-white font-extrabold py-3.5 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                <span>السؤال التالي</span>
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+
+        <!-- SCREEN 3: Result Screen -->
+        <div id="result-screen" class="hidden text-center space-y-6 py-2">
+            <div class="relative inline-block">
+                <div id="result-icon-bg" class="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-2 text-white text-5xl shadow-xl">
+                    <i id="result-icon" class="fas fa-trophy"></i>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-black text-gray-800 mb-1" id="result-title">نتائج الاختبـار</h2>
+                <p class="text-gray-600 text-sm font-semibold" id="result-subtitle">تم إنهاء الاختبار بنجاح!</p>
+            </div>
+
+            <!-- Detailed Score Box -->
+            <div class="bg-gradient-to-br from-teal-50 to-emerald-50 p-6 rounded-2xl border border-teal-200 space-y-3 shadow-inner">
+                <p class="text-gray-700 font-bold text-base">النتيجة النهائية للطالبة: <span id="final-student-name" class="text-teal-900 font-extrabold underline decoration-emerald-400"></span></p>
+                <div class="text-4xl sm:text-5xl font-black text-emerald-600 tracking-tight my-2" id="final-score-text">0 / 20</div>
+                <div class="inline-block bg-white px-4 py-1.5 rounded-full text-sm font-bold text-teal-800 border border-teal-200 shadow-sm" id="percentage-text">النسبة المئوية: 0%</div>
+            </div>
+
+            <!-- Audio Reinforcement Status Card -->
+            <div id="reinforcement-box" class="p-4 rounded-xl font-bold text-sm bg-amber-50 text-amber-900 border border-amber-200 flex items-center justify-center gap-3 shadow-sm">
+                <i class="fas fa-volume-up text-amber-600 animate-pulse text-lg"></i>
+                <span id="voice-message-text">جاري تشغيل التعزيز الصوتي للنتيجة...</span>
+            </div>
+
+            <div class="text-xs text-gray-500 font-bold pt-2">
+                معلمة المادة: أ. روان المنصور • الابتدائية ٧٧
+            </div>
+
+            <!-- Action Buttons -->
+            <button onclick="location.reload()" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-extrabold py-3.5 rounded-xl shadow-lg transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fas fa-redo"></i>
+                <span>إعادة الاختبار مرة أخرى</span>
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Full Quiz Questions extracted directly from Grade 5 Digital Skills Exam PDF
+        const quizData = [
+            // Question 1
+            {
+                type: 'mcq',
+                question: 'جهاز إلكتروني يمكنه اتباع تعليمات محددة واتخاذ القرارات والقيام بالكثير من الأمور المفيدة:',
+                options: ['جهاز الحاسب', 'الكاميرا', 'الفأرة'],
+                correct: 0,
+                marks: 1
+            },
+            // Question 2
+            {
+                type: 'mcq',
+                question: 'من أجزاء الحاسب الرئيسية:',
+                options: ['اللوحة الأم', 'الميكروفون', 'السماعة'],
+                correct: 0,
+                marks: 1
+            },
+            // Question 3
+            {
+                type: 'mcq',
+                question: 'ظهور خط أحمر تحت النص في برنامج الوورد يعني:',
+                options: ['خطأ إملائي', 'خطأ نحوي', 'لا يعني شيء'],
+                correct: 0,
+                marks: 1
+            },
+            // Question 4
+            {
+                type: 'mcq',
+                question: 'حجم الملف يتم حسابه بوحدة:',
+                options: ['جرام', 'بايت', 'فيديو'],
+                correct: 1,
+                marks: 1
+            },
+            // Question 5
+            {
+                type: 'mcq',
+                question: 'من أجهزة الإدخال:',
+                options: ['السماعات', 'لوحة المفاتيح', 'الطابعات'],
+                correct: 1,
+                marks: 1
+            },
+            // Question 6
+            {
+                type: 'mcq',
+                question: 'أجهزة تتميز بخفة الوزن وسهولة الحمل وتحتوي على بطارية داخلية:',
+                options: ['التلفزيون', 'الحاسب المحمول', 'الحاسب المكتبي'],
+                correct: 1,
+                marks: 1
+            },
+            // Question 7
+            {
+                type: 'mcq',
+                question: 'يحظى بشعبية كبيرة لدى المصممين والرسامين:',
+                options: ['الطابعة', 'لوح الرسم الرقمي', 'الفأرة'],
+                correct: 1,
+                marks: 1
+            },
+            // Question 8
+            {
+                type: 'mcq',
+                question: 'لإنشاء اختصار نضغط على الملف بزر الفأرة الأيمن ثم نختار:',
+                options: ['إنشاء اختصار', 'قص', 'لصق'],
+                correct: 0,
+                marks: 1
+            },
+            // Question 9 (TF 1)
+            {
+                type: 'tf',
+                question: 'يمكننا إدراج صور من الحاسب أو الإنترنت في برنامج الوورد.',
+                options: ['صواب ( √ )', 'خطأ ( × )'],
+                correct: 0,
+                marks: 1
+            },
+            // Question 10 (TF 2)
+            {
+                type: 'tf',
+                question: 'وحدة المعالجة المركزية هي بمثابة عقل الحاسب.',
+                options: ['صواب ( √ )', 'خطأ ( × )'],
+                correct: 0,
+                marks: 1
+            },
+            // Question 11 (TF 3)
+            {
+                type: 'tf',
+                question: 'الطابعة النافثة للحبر أسرع وأغلى من طابعة الليزر.',
+                options: ['صواب ( √ )', 'خطأ ( × )'],
+                correct: 1,
+                marks: 1
+            },
+            // Question 12 (TF 4)
+            {
+                type: 'tf',
+                question: 'عند حذف ملف من حاسبك فإنه لا يمكن إيجاده ويتم حذفه بشكل نهائي مباشرة.',
+                options: ['صواب ( √ )', 'خطأ ( × )'],
+                correct: 1,
+                marks: 1
+            },
+            // Question 13 (TF 5)
+            {
+                type: 'tf',
+                question: 'يستخدم الحاسب المكتبي في المدرسة والمكتب والمنزل.',
+                options: ['صواب ( √ )', 'خطأ ( × )'],
+                correct: 0,
+                marks: 1
+            },
+            // Question 14 (TF 6)
+            {
+                type: 'tf',
+                question: 'أستطيع تغيير لغة الكتابة في الحاسب من العربية إلى الإنجليزية.',
+                options: ['صواب ( √ )', 'خطأ ( × )'],
+                correct: 0,
+                marks: 1
+            },
+            // Question 15 (TF 7)
+            {
+                type: 'tf',
+                question: 'مهمة ضغط الملفات والمجلدات هي توفير مساحة تخزين.',
+                options: ['صواب ( √ )', 'خطأ ( × )'],
+                correct: 0,
+                marks: 1
+            },
+            // Question 16 (Image Q1)
+            {
+                type: 'visual',
+                question: 'حددي الوصف الصحيح لهذه الأداة / العنصر:',
+                icon: 'fa-hard-drive text-amber-500 text-6xl',
+                label: '💾 قرص تخزين خارجي / فلاش ديسك',
+                options: ['وحدة تخزين خارجية', 'جهاز إدخال', 'جهاز إخراج', 'مجلد مضغوط'],
+                correct: 0,
+                marks: 1
+            },
+            // Question 17 (Image Q2)
+            {
+                type: 'visual',
+                question: 'حددي الوصف الصحيح لهذه القطعة:',
+                icon: 'fa-keyboard text-blue-500 text-6xl',
+                label: '⌨️ لوحة المفاتيح',
+                options: ['جهاز إخراج', 'جهاز إدخال', 'وحدة تخزين خارجية', 'مجلد مختصر'],
+                correct: 1,
+                marks: 1
+            },
+            // Question 18 (Image Q3)
+            {
+                type: 'visual',
+                question: 'حددي الوصف الصحيح لهذا الجهاز:',
+                icon: 'fa-desktop text-teal-600 text-6xl',
+                label: '🖥️ الشاشة',
+                options: ['جهاز إدخال', 'جهاز إخراج', 'وحدة تخزين خارجية', 'مجلد مضغوط'],
+                correct: 1,
+                marks: 1
+            },
+            // Question 19 (Image Q4)
+            {
+                type: 'visual',
+                question: 'ماذا يمثل هذا الشعار في الحاسب؟',
+                icon: 'fa-file-zipper text-yellow-600 text-6xl',
+                label: '🗜️ مجلد عليه سحاب / ضغط',
+                options: ['مجلد مضغوط', 'مجلد مختصر', 'جهاز إدخال', 'وحدة تخزين خارجية'],
+                correct: 0,
+                marks: 1
+            },
+            // Question 20 (Image Q5)
+            {
+                type: 'visual',
+                question: 'ماذا يمثل هذا المجلد المترابط بسهم؟',
+                icon: 'fa-folder-tree text-amber-600 text-6xl',
+                label: '📁 مجلد يحتوي سهم الاختصار (Shortcut)',
+                options: ['مجلد مختصر', 'مجلد مضغوط', 'جهاز إخراج', 'جهاز إدخال'],
+                correct: 0,
+                marks: 1
+            }
+        ];
+
+        // State Variables
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let studentName = '';
+        let studentClass = '';
+        let answered = false;
+
+        // Sound Effects System
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(659.25, audioCtx.currentTime + 0.1); 
+                osc.frequency.exponentialRampToValueAtTime(783.99, audioCtx.currentTime + 0.2); 
+                gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.35);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(130.81, audioCtx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.25);
+            } else if (type === 'win') {
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const noteOsc = audioCtx.createOscillator();
+                    const noteGain = audioCtx.createGain();
+                    noteOsc.connect(noteGain);
+                    noteGain.connect(audioCtx.destination);
+                    noteOsc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.1);
+                    noteGain.gain.setValueAtTime(0.2, audioCtx.currentTime + idx * 0.1);
+                    noteGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + idx * 0.1 + 0.25);
+                    noteOsc.start(audioCtx.currentTime + idx * 0.1);
+                    noteOsc.stop(audioCtx.currentTime + idx * 0.1 + 0.25);
+                });
+            }
+        }
+
+        // Voice Feedback System
+        function speakMessage(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ar-SA';
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const studentForm = document.getElementById('student-form');
+        const displayStudentName = document.getElementById('display-student-name');
+        const questionNumber = document.getElementById('question-number');
+        const currentScoreEl = document.getElementById('current-score');
+        const progressBar = document.getElementById('progress-bar');
+        const questionText = document.getElementById('question-text');
+        const visualContainer = document.getElementById('visual-container');
+        const visualContent = document.getElementById('visual-content');
+        const optionsContainer = document.getElementById('options-container');
+        const questionTypeBadge = document.getElementById('question-type-badge');
+        const questionMarks = document.getElementById('question-marks');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Form Submission
+        studentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            studentName = document.getElementById('student-name').value.trim();
+            studentClass = document.getElementById('student-class').value;
+
+            if (studentName) {
+                displayStudentName.textContent = `${studentName} (${studentClass})`;
+                startScreen.classList.add('hidden');
+                quizScreen.classList.remove('hidden');
+                loadQuestion();
+            }
+        });
+
+        // Load Question Function
+        function loadQuestion() {
+            answered = false;
+            feedbackMessage.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            optionsContainer.innerHTML = '';
+            visualContainer.classList.add('hidden');
+
+            const q = quizData[currentQuestionIndex];
+            questionText.textContent = q.question;
+            questionNumber.textContent = `${currentQuestionIndex + 1} / ${quizData.length}`;
+            questionMarks.textContent = q.marks;
+            
+            if (q.type === 'mcq') {
+                questionTypeBadge.textContent = 'اختيار من متعدد';
+            } else if (q.type === 'tf') {
+                questionTypeBadge.textContent = 'صواب أم خطأ';
+            } else if (q.type === 'visual') {
+                questionTypeBadge.textContent = 'تعرّف على الصورة';
+                visualContainer.classList.remove('hidden');
+                visualContent.innerHTML = `
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fas ${q.icon}"></i>
+                        <span class="text-xs font-bold text-gray-600 bg-white px-3 py-1 rounded-full border border-gray-200 mt-1">${q.label}</span>
+                    </div>
+                `;
+            }
+
+            // Progress Bar Update
+            const progress = ((currentQuestionIndex) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Render Choices
+            q.options.forEach((opt, idx) => {
+                const button = document.createElement('button');
+                button.className = 'w-full text-right p-3.5 sm:p-4 rounded-xl border-2 border-gray-100 bg-white hover:border-teal-300 hover:bg-teal-50/60 transition-all font-semibold text-gray-800 flex items-center justify-between group shadow-sm';
+                button.onclick = () => selectOption(idx, button);
+                
+                button.innerHTML = `
+                    <span class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-full bg-teal-50 group-hover:bg-teal-200 text-teal-800 flex items-center justify-center text-xs font-bold transition-colors">${idx + 1}</span>
+                        <span class="text-sm sm:text-base">${opt}</span>
+                    </span>
+                    <i class="far fa-circle text-gray-300 group-hover:text-teal-500 transition-colors"></i>
+                `;
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Option Click Listener
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const q = quizData[currentQuestionIndex];
+            const isCorrect = selectedIndex === q.correct;
+            const allBtns = optionsContainer.querySelectorAll('button');
+
+            allBtns.forEach(btn => btn.disabled = true);
+
+            if (isCorrect) {
+                score += q.marks;
+                currentScoreEl.textContent = score;
+                playSound('correct');
+
+                selectedBtn.className = 'w-full text-right p-3.5 sm:p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 font-bold text-emerald-900 flex items-center justify-between correct-anim shadow-sm';
+                selectedBtn.querySelector('i').className = 'fas fa-check-circle text-emerald-600 text-xl';
+
+                feedbackMessage.textContent = 'إجابة صحيحة! أحسنتِ يا بطلة الرقمية 🌟';
+                feedbackMessage.className = 'mt-4 p-3.5 rounded-xl text-center font-bold bg-emerald-100 text-emerald-900 border border-emerald-200 block';
+            } else {
+                playSound('wrong');
+
+                selectedBtn.className = 'w-full text-right p-3.5 sm:p-4 rounded-xl border-2 border-rose-500 bg-rose-50 font-bold text-rose-900 flex items-center justify-between wrong-anim shadow-sm';
+                selectedBtn.querySelector('i').className = 'fas fa-times-circle text-rose-600 text-xl';
+
+                const correctBtn = allBtns[q.correct];
+                correctBtn.className = 'w-full text-right p-3.5 sm:p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 font-bold text-emerald-900 flex items-center justify-between shadow-sm';
+                correctBtn.querySelector('i').className = 'fas fa-check-circle text-emerald-600 text-xl';
+
+                feedbackMessage.textContent = 'إجابة خاطئة! الإجابة الصحيحة محددة باللون الأخضر. 💡';
+                feedbackMessage.className = 'mt-4 p-3.5 rounded-xl text-center font-bold bg-rose-100 text-rose-900 border border-rose-200 block';
+            }
+
+            nextBtn.classList.remove('hidden');
+        }
+
+        // Next Button Handler
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        // Show Final Results
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const totalMarks = quizData.reduce((acc, q) => acc + q.marks, 0);
+            const percentage = Math.round((score / totalMarks) * 100);
+
+            document.getElementById('final-student-name').textContent = `${studentName} (${studentClass})`;
+            document.getElementById('final-score-text').textContent = `${score} / ${totalMarks}`;
+            document.getElementById('percentage-text').textContent = `النسبة المئوية: ${percentage}%`;
+
+            const iconBg = document.getElementById('result-icon-bg');
+            const icon = document.getElementById('result-icon');
+            const title = document.getElementById('result-title');
+            const subtitle = document.getElementById('result-subtitle');
+            const voiceText = document.getElementById('voice-message-text');
+
+            let voiceMsg = '';
+
+            if (percentage >= 90) {
+                playSound('win');
+                iconBg.className = 'w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-2 text-white text-4xl shadow-xl bg-gradient-to-tr from-amber-400 to-yellow-300';
+                icon.className = 'fas fa-trophy';
+                title.textContent = 'ممتازة وعبقرية! 🏆';
+                subtitle.textContent = 'درجة كاملة وأداء استثنائي يرفع الرأس!';
+                voiceMsg = `ما شاء الله يا ${studentName}! تفوق ممتع ودرجة ممتازة، أفتخر بكِ يا بطلة المهارات الرقمية! تحيات معلمتك روان المنصور.`;
+            } else if (percentage >= 75) {
+                playSound('correct');
+                iconBg.className = 'w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-2 text-white text-4xl shadow-xl bg-gradient-to-tr from-teal-500 to-emerald-400';
+                icon.className = 'fas fa-star';
+                title.textContent = 'نتيجة رائعة جداً! 🌟';
+                subtitle.textContent = 'أجبتِ على معظم الأسئلة بذكاء ومهارة!';
+                voiceMsg = `أحسنتِ يا طالبتي المبدعة ${studentName}! أداء متميز ونتيجة رائعة جداً، واصلي هذا الاجتهاد!`;
+            } else {
+                playSound('wrong');
+                iconBg.className = 'w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-2 text-white text-4xl shadow-xl bg-gradient-to-tr from-blue-400 to-indigo-400';
+                icon.className = 'fas fa-thumbs-up';
+                title.textContent = 'محاولة جيدة! 💪';
+                subtitle.textContent = 'يمكنكِ مراجعة الدروس وإعادة التحدي للوصول للدرجة الكاملة!';
+                voiceMsg = `محاولة طيبة يا ${studentName}، يمكنكِ مراجعة الدروس جيداً وإعادة الاختبار لتحصلي على النتيجة الكاملة!`;
+            }
+
+            voiceText.textContent = voiceMsg;
+            speakMessage(voiceMsg);
+        }
+    </script>
+</body>
+</html>
+
+
